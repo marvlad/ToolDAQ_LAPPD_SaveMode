@@ -1,0 +1,6 @@
+#Receive Receive configfiles/ReadOutChain/BoardsConfig
+SetupBoards SetupBoards configfiles/ReadOutChain/BoardsConfig
+ListenForData ListenForData configfiles/ReadOutChain/BoardsConfig
+#Stream Stream configfiles/ReadOutChain/BoardsConfig
+
+
