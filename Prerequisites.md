@@ -5,7 +5,7 @@
 ```
 ## General Prerequisites for ToolDAQ and compiler
 ```bash
-#sudo apt-get install make cmake gcc g++ binutils libx11-dev libxpm-dev libxft-dev libxext-dev git display
+#sudo apt-get install make cmake gcc g++ binutils libx11-dev libxpm-dev libxft-dev libxext-dev git dialog
 ```
 ## Prerequisites for the Data ToolChain
 ```bash
