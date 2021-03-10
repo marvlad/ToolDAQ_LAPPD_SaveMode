@@ -29,10 +29,11 @@ class ListenForData: public Tool {
   bool Execute(); ///< Executre function used to perform Tool perpose. 
   bool Finalise(); ///< Finalise funciton used to clean up resorces.
 
+  string getTime();
 
  private:
 
-
+  string timestamp;
 
 
 

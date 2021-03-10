@@ -13,6 +13,8 @@ bool ListenForData::Initialise(std::string configfile, DataModel &data){
 
 	if(!m_variables.Get("verbose",m_verbose)) m_verbose=1;
 
+	timestamp = getTime();
+
 	return true;
 }
 
@@ -24,7 +26,7 @@ bool ListenForData::Execute(){
 		m_data->acc->softwareTrigger();
 	}
 
-	m_data->psec.readRetval = m_data->acc->listenForAcdcData(m_data->conf.triggermode, m_data->conf.Raw_Mode, "ToolDAQ");
+	m_data->psec.readRetval = m_data->acc->listenForAcdcData(m_data->conf.triggermode, m_data->conf.Raw_Mode, timestamp);
 	if(m_data->psec.readRetval != 0)
 	{
 		m_data->psec.FailedReadCounter = m_data->psec.FailedReadCounter + 1;
@@ -42,4 +44,13 @@ bool ListenForData::Execute(){
 bool ListenForData::Finalise(){
 	delete m_data->acc;
 	return true;
+}
+
+string ListenForData::getTime()
+{
+    auto now = std::chrono::system_clock::now();
+    auto in_time_t = std::chrono::system_clock::to_time_t(now);
+    std::stringstream ss;
+    ss << std::put_time(std::localtime(&in_time_t), "%Y%d%m_%H%M%S");
+    return ss.str();
 }
