@@ -31,8 +31,6 @@ bool ListenForData::Execute(){
 	{
 		m_data->psec.FailedReadCounter = m_data->psec.FailedReadCounter + 1;
 		m_data->psec.ReceiveData.clear();
-		
-		return false;
 	}
 
 	//m_data->psec.ReceiveData = m_data->acc->returnRaw();
