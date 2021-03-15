@@ -82,8 +82,8 @@ bool Metadata::parseBuffer(vector<unsigned short> acdcBuffer)
 
 	//loop through the data and find locations of startwords. 
     //this can be made more efficient if you are having efficiency problems.
-	for(bit = acdcBuffer.begin(); bit != acdcBuffer.end(); ++bit)
-	{
+     for(bit = acdcBuffer.begin(); bit != acdcBuffer.end(); ++bit)
+     {
 		//the iterator is at an element with startword value. 
 		//push the index (integer, from std::distance) to a vector. 
         if(*bit == startword)
@@ -95,7 +95,22 @@ bool Metadata::parseBuffer(vector<unsigned short> acdcBuffer)
         	}
         	start_indices.push_back(dist);
         }
-	}
+    }
+	
+    if(start_indices.size()>NUM_PSEC)
+    {
+        for(int k=0; k<(int)start_indices.size()-1; k++)
+        {
+            if(start_indices[k+1]-start_indices[k]>6*256+14)
+            {
+                //nothing
+            }else
+            {
+                start_indices.erase(start_indices.begin()+(k+1));
+                k--;
+            }
+        }
+    }
 
 	//I have found experimentally that sometimes
     //the ACC sends an ACDC buffer that has 8001 elements
