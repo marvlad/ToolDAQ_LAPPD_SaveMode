@@ -401,7 +401,7 @@ int ACC::whichAcdcsConnected()
 			cout << "Board "<< i << " connected and expected to be " << state << endl;	
 		}else if(lastAccBuffer.at(16+i) != 32 && lastAccBuffer.at(16+i) != 0)	
 		{	
-			cout << "Board "<< i << " not with 32 words after ACC buffer read, ";	
+			cout << "HERE! Board "<< i << " not with 32 words after ACC buffer read, ";	
 			cout << "Size " << lastAccBuffer.at(16+i);	
 			cout << " Expected to be " << state << endl;	
 			retval = -1;	
