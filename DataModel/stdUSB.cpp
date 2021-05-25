@@ -247,9 +247,9 @@ int stdUSB::readData(unsigned char * pData, int* lread) { // throw(...)
     //48Mbit per sec. 
     //l-packets*4bytes per packet*8bits per byte/48Mbits per sec = ~0.6ms - 6ms depending on which. 
     int waitTime = buff_sz*8/48; //microseconds
-    std::this_thread::sleep_for(std::chrono::microseconds(waitTime)); 
+   // std::this_thread::sleep_for(std::chrono::microseconds(waitTime)); 
     int retval = libusb_bulk_transfer(stdHandle, EP_READ, pData, buff_sz, lread, USB_TOUT_MS_READ);
-    std::this_thread::sleep_for(std::chrono::microseconds(waitTime));
+   // std::this_thread::sleep_for(std::chrono::microseconds(waitTime));
 
     if (retval == 0) {
         return retval;
