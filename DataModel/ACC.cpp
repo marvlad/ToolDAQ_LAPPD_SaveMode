@@ -214,9 +214,24 @@ int ACC::createAcdcs()
 	//loads a ACC buffer into private member
 	readAccBuffer(); 
 
-	//parses the last acc buffer to 
-	//see which ACDCs are aligned. 
-	whichAcdcsConnected(); 
+		//parses the last acc buffer to 	
+	//see which ACDCs are aligned. 	
+	int retval = whichAcdcsConnected(); 	
+	if(retval==-1)	
+	{	
+		std::cout << "Trying to reset ACDC boards" << std::endl;	
+		dumpData();	
+		emptyUsbLine();	
+		usleep(1000000);	
+		unsigned int command = 0xFFFF0000;	
+		usb->sendData(command);	
+		usleep(1000000);	
+		int retval = whichAcdcsConnected();	
+		if(retval==-1)	
+		{	
+			std::cout << "After ACDC reset no changes, still no boards found" << std::endl;	
+		}	
+	}
 
 	//if there are no ACDCs, return 0
 	if(alignedAcdcIndices.size() == 0)
@@ -336,8 +351,9 @@ void ACC::clearAcdcs()
 }
 
 
-vector<int> ACC::whichAcdcsConnected()
+int ACC::whichAcdcsConnected()
 {
+	int retval;
 	//New sequence to ask the ACC to reply with the number of boards connected 
 	enableTransfer(0); //Disables the PSEC4 frame data transfer for this sequence. Has to be set to HIGH later again
 
@@ -360,7 +376,7 @@ vector<int> ACC::whichAcdcsConnected()
 		string err_msg = "Something wrong with ACC buffer, size: ";  
 		err_msg += to_string(lastAccBuffer.size());
 		writeErrorLog(err_msg);
-		return connectedBoards;
+		return 0;
 	}
 
 	//for explanation of the "2", see INFO1 of CC_STATE in packetUSB.vhd
@@ -369,26 +385,49 @@ vector<int> ACC::whichAcdcsConnected()
 	//board is connected for both the first two bytes
 	//and last two bytes. 
 	
-	for(int i = 0; i < MAX_NUM_BOARDS; i++)
-	{
-		if(lastAccBuffer.at(16+i) != 32){
-			cout << "Board "<< i << " not with 32 words after ACC buffer read ";
-			cout << "Size " << lastAccBuffer.at(16+i)  << endl;
-			continue;
-		}
-
-		//both (1<<i) and (1<<i+8) should be true if aligned & synced respectively
-		if((alignment_packet & (1 << i)))
-		{
-			//the i'th board is connected
-			connectedBoards.push_back(i);
-		}
-	}
-
-	//this allows no vector clearing to be needed
-	alignedAcdcIndices = connectedBoards;
-	cout << "Connected Boards: " << connectedBoards.size() << endl;
-	return connectedBoards;
+	string state;	
+	for(int i = 0; i < MAX_NUM_BOARDS; i++)	
+	{		
+		if((alignment_packet & (1 << i)))	
+		{	
+			state = "ON";	
+		}else	
+		{	
+			state = "OFF";	
+		}	
+		if(lastAccBuffer.at(16+i) == 32)	
+		{	
+			cout << "Board "<< i << " with 32 words after ACC buffer read, ";	
+			cout << "Board "<< i << " connected and expected to be " << state << endl;	
+		}else if(lastAccBuffer.at(16+i) != 32 && lastAccBuffer.at(16+i) != 0)	
+		{	
+			cout << "Board "<< i << " not with 32 words after ACC buffer read, ";	
+			cout << "Size " << lastAccBuffer.at(16+i);	
+			cout << " Expected to be " << state << endl;	
+			retval = -1;	
+			continue;	
+		}else if(lastAccBuffer.at(16+i) != 32)	
+		{	
+			cout << "Board "<< i << " not with 32 words after ACC buffer read ";	
+			cout << "Size " << lastAccBuffer.at(16+i);	
+			cout << " Expected to be " << state << endl;	
+			continue;	
+		}	
+		//both (1<<i) and (1<<i+8) should be true if aligned & synced respectively	
+		if((alignment_packet & (1 << i)))	
+		{	
+			//the i'th board is connected	
+			connectedBoards.push_back(i);	
+		}	
+	}	
+	if(connectedBoards.size()==0 || retval==-1)	
+	{	
+		return -1;	
+	}	
+	//this allows no vector clearing to be needed	
+	alignedAcdcIndices = connectedBoards;	
+	cout << "Connected Boards: " << connectedBoards.size() << endl;	
+	return 1;
 }
 
 //sends software trigger to all connected boards. 
