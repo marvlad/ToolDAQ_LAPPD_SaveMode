@@ -106,6 +106,21 @@ int ACDC::parseDataFromBuffer(vector<unsigned short> acdc_buffer)
         	start_indices.push_back(dist);
         }
 	}
+	
+	if(start_indices.size()>NUM_PSEC)
+	{
+		for(int k=0; k<(int)start_indices.size()-1; k++)
+		{
+			if(start_indices[k+1]-start_indices[k]>6*256+14)
+			{
+				//nothing
+			}else
+			{
+				start_indices.erase(start_indices.begin()+(k+1));
+				k--;
+			}
+		}
+	}
 
     bool corruptBuffer = false;
 	if(start_indices.size() != NUM_PSEC)
