@@ -353,7 +353,7 @@ void ACC::clearAcdcs()
 
 int ACC::whichAcdcsConnected()
 {
-	int retval;
+	int retval=0;
 	//New sequence to ask the ACC to reply with the number of boards connected 
 	enableTransfer(0); //Disables the PSEC4 frame data transfer for this sequence. Has to be set to HIGH later again
 
