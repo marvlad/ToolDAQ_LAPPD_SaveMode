@@ -121,7 +121,7 @@ private:
 	map<int, vector<unsigned short>> map_raw;
 
 	//-----------private functions for the setup and initilization
-	vector<int> whichAcdcsConnected(); //checks which ACDC boards are connected
+	int whichAcdcsConnected(); //checks which ACDC boards are connected
 	vector<unsigned short> sendAndRead(unsigned int command, int buffsize); //wakes the usb line, only called in constructor. 
 	bool checkUSB(); //checking usb line and returning or couting appropriately.  
 	void clearAcdcs(); //memory deallocation for acdc vector. 
