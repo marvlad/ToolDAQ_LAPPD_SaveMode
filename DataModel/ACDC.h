@@ -31,21 +31,12 @@ public:
 
 	//----------local set functions
 	void setBoardIndex(int bi); // set the board index for the current acdc
-	void setPeds(map<int, vector<double>> p, int bi){peds[bi] = p;} //sets pedestal map
-	void setConv(map<int, vector<double>>& c){conv = c;} //sets adc-conversion map
-	void setData(map<int, vector<double>>& d){data = d;} //sets data map
 
 	//----------parse function for data stream 
 	int parseDataFromBuffer(vector<unsigned short> acdc_buffer); //parses only the psec data component of the ACDC buffer
 
 	//----------write data to file
-	void writeRawBufferToFile(vector<unsigned short> lastAcdcBuffer); //write raw buffer to file for debugging 
-	void writeRawDataToFile(vector<unsigned short> buffer, ofstream& d); //write raw buffer to file to save as regular data 
 	void writeErrorLog(string errorMsg); //write errorlog with timestamps
-
-	//----------read data from file
-	void readPedsFromFile(ifstream& ifs, int bi); //read the pedestal values from file 
-	void readConvsFromFile(ifstream& ifs); //read the conversion values from file
 
 private:
 	//----------all neccessary classes
@@ -53,11 +44,8 @@ private:
 
 	//----------all neccessary global variables
 	int boardIndex; //var: represents the boardindex for the current board
-	unsigned int trigMask; //var: triggermask
 	vector<unsigned short> lastAcdcBuffer; //most recently received ACDC buffer
 	map<int, vector<double>> data; //entire data map | index: channel < samplevector
-	map<int, map<int, vector<double>>> peds; //entire ped map | index: board < channel < samplevector
-	map<int, vector<double>> conv; //conversion factor from adc counts to mv from calibration file. 
 	map<string, unsigned short> map_meta; //entire meta map | index: metakey < value
 };
 

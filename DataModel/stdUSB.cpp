@@ -46,18 +46,24 @@ stdUSB::stdUSB(uint16_t vid, uint16_t pid) {
 }
 
 stdUSB::~stdUSB() { 
-  if (stdHandle != INVALID_HANDLE_VALUE){
-  	libusb_context *usb_context = NULL;
-  	bool retval;
+	if (stdHandle != INVALID_HANDLE_VALUE)
+	{
+		//libusb_context *usb_context = NULL;
+		bool retval;
 
-    retval = freeHandle();
-    if(!retval){
-    	retval = freeHandle();
-    }
-    if(retval){
-    	libusb_exit(usb_context);
-  	}
-  }
+		retval = freeHandle();
+		if(!retval)
+		{
+			retval = freeHandle();
+		}
+		if(retval)
+		{
+			libusb_exit(usb_context);
+		}else
+		{
+			std::cout << "Could not close USB correctly" << std::endl;
+		}
+	}
 }
 
 /*
@@ -80,28 +86,27 @@ bool stdUSB::createHandles(int device_count) { //default device_count=1
 
     //Initilize the devices as ubs device
     libusb_device *dev = init(device_count);
-    //Context is not neccessary in this case, thusset to NULL
-    libusb_context *usb_context = NULL;
 
     if(dev == nullptr)
     {
         return false;
     }
 
-    /* create a global handle for the usb device
+    // create a global handle for the usb device
+    /*
     stdHandle = libusb_open_device_with_vid_pid(usb_context,USBFX2_VENDOR_ID,USBFX2_PRODUCT_ID);
     if (stdHandle == INVALID_HANDLE_VALUE) {
         cout << "Failed to open device. handle=" << stdHandle << endl;
         return false;
-    } */
+    }*/ 
 
     retval = libusb_open(dev,&stdHandle);
     if(retval!=0)
     {
-		cout << "Failed to open device. retval=" << retval << endl;
+	cout << "Failed to open device. retval=" << retval << endl;
         return false;    
     }
-
+	
     retval = libusb_set_configuration(stdHandle, CNFNO);
     if (retval != 0) {
         cout << "Failed to set USB Configuration " << CNFNO << ". Return value: " << retval << endl;
@@ -119,7 +124,6 @@ bool stdUSB::createHandles(int device_count) { //default device_count=1
 
 //New trial version of stdUSB::init()
 struct libusb_device* stdUSB::init(int device_count){
-    libusb_context *usb_context = NULL;
     libusb_device **list = NULL;
     ssize_t count = 0;
     int retval;
@@ -168,7 +172,12 @@ bool stdUSB::freeHandle(void) { //throw(...)
     	cout << "Couldn't release interface" << endl;
     	return false; 
     }
-
+    retval = reset();
+    if(!retval)
+    {
+    	cout << "Couldn't reset device" << endl;
+    	return false; 
+    }
     libusb_close(stdHandle);
 
     return true;
@@ -199,7 +208,7 @@ bool stdUSB::sendData(unsigned int data) { // throw(...)
     retval = libusb_bulk_transfer(stdHandle, EP_WRITE, (unsigned char*)buff, sizeof(buff), &transferred, USB_TOUT_MS_WRITE);
 
     if (retval == 0 && transferred == 4){ //return value must be exact as the bytes transferred
-      	//printf("sending data to board...\n");  
+     	//printf("sending 0x%08x\n", data);  
       	return true;
     }
     else if(retval != 0 && transferred == 4){
@@ -247,9 +256,9 @@ int stdUSB::readData(unsigned char * pData, int* lread) { // throw(...)
     //48Mbit per sec. 
     //l-packets*4bytes per packet*8bits per byte/48Mbits per sec = ~0.6ms - 6ms depending on which. 
     int waitTime = buff_sz*8/48; //microseconds
-   // std::this_thread::sleep_for(std::chrono::microseconds(waitTime)); 
+    // std::this_thread::sleep_for(std::chrono::microseconds(waitTime)); 
     int retval = libusb_bulk_transfer(stdHandle, EP_READ, pData, buff_sz, lread, USB_TOUT_MS_READ);
-   // std::this_thread::sleep_for(std::chrono::microseconds(waitTime));
+    // std::this_thread::sleep_for(std::chrono::microseconds(waitTime));
 
     if (retval == 0) {
         return retval;

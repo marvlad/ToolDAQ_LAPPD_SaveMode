@@ -30,6 +30,7 @@ class ListenForData: public Tool {
   bool Finalise(); ///< Finalise funciton used to clean up resorces.
 
   string getTime();
+  int counter=0;
 
  private:
 

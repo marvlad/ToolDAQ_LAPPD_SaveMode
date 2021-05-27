@@ -5,15 +5,12 @@
 Triggermode 1 #...
 
 ##ACC settings
-ACC_Mode 1 #edge(0) or level(1)
 ACC_Sign 0 #normal(0) or inverted(1)
 
 ##ACDC settings
-ACDC_Mode 1 #edge(0) or level(1)
 ACDC_Sign 0 #normal(0) or inverted(1)
 
 ##Self trigger settings
-SELF_Mode 1 #edge(0) or level(1)
 SELF_Sign 0 #normal(0) or inverted(1)
 SELF_Enable_Coincidence 1 #on(1) or off(0)
 SELF_Coincidence_Number 2 #number from 0 to 30
@@ -47,4 +44,8 @@ Raw_Mode 0 #returns a map with <int, vector<unsigned short>> | the int is the bo
 #Pedestal set value channel
 Pedestal_channel 3000 #pedestal value to be set 
 Pedestal_channel_mask 0x1F #5 bit representin psec chips
+
+#PPS
+PPS_Ratio 0x0001
+PPS_Mux 1
 

@@ -33,6 +33,8 @@ class stdUSB {
     private:
         struct libusb_device* init(int device_count); //initilises the usb device for claiming handles
         struct libusb_device_handle *stdHandle; //usb handle struct
+	struct libusb_context *usb_context;
+	
         /* USBFX2 device descriptions */
         uint16_t USBFX2_VENDOR_ID; //0x090c;
         uint16_t USBFX2_PRODUCT_ID; //0x1000;

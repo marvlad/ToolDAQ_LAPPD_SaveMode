@@ -13,7 +13,7 @@ bool ListenForData::Initialise(std::string configfile, DataModel &data){
 
 	if(!m_variables.Get("verbose",m_verbose)) m_verbose=1;
 
-	timestamp = getTime();
+	
 
 	return true;
 }
@@ -26,11 +26,21 @@ bool ListenForData::Execute(){
 		m_data->acc->softwareTrigger();
 	}
 
+	if (counter>=1000)
+	{
+		counter=0;
+		timestamp = getTime();
+	}
+
+
 	m_data->psec.readRetval = m_data->acc->listenForAcdcData(m_data->conf.triggermode, m_data->conf.Raw_Mode, timestamp);
 	if(m_data->psec.readRetval != 0)
 	{
 		m_data->psec.FailedReadCounter = m_data->psec.FailedReadCounter + 1;
 		m_data->psec.ReceiveData.clear();
+	}else if(m_data->psec.readRetval == 0)
+	{
+		counter++;
 	}
 
 	//m_data->psec.ReceiveData = m_data->acc->returnRaw();

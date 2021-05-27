@@ -82,8 +82,8 @@ bool Metadata::parseBuffer(vector<unsigned short> acdcBuffer)
 
 	//loop through the data and find locations of startwords. 
     //this can be made more efficient if you are having efficiency problems.
-     for(bit = acdcBuffer.begin(); bit != acdcBuffer.end(); ++bit)
-     {
+	for(bit = acdcBuffer.begin(); bit != acdcBuffer.end(); ++bit)
+	{
 		//the iterator is at an element with startword value. 
 		//push the index (integer, from std::distance) to a vector. 
         if(*bit == startword)
@@ -95,8 +95,8 @@ bool Metadata::parseBuffer(vector<unsigned short> acdcBuffer)
         	}
         	start_indices.push_back(dist);
         }
-    }
-	
+	}
+
     if(start_indices.size()>NUM_PSEC)
     {
         for(int k=0; k<(int)start_indices.size()-1; k++)
@@ -212,14 +212,14 @@ bool Metadata::parseBuffer(vector<unsigned short> acdcBuffer)
     }
     //Trigger PSEC settings
     checkAndInsert("trigger_mode", ac_info[1][5] & 0xF); //Info 6, PSEC1 bit(3-0)
-    checkAndInsert("trigger_validation_window_start", (ac_info[1][5] & 0xFFF0) >> 4); //Info 6, PSEC1 bit(15-4)
-    checkAndInsert("trigger_validation_window_length", ac_info[2][5] & 0xFFF); //info 6, PSEC2 bit(11-0)
+    //checkAndInsert("trigger_validation_window_start", (ac_info[1][5] & 0xFFF0) >> 4); //Info 6, PSEC1 bit(15-4)
+    //checkAndInsert("trigger_validation_window_length", ac_info[2][5] & 0xFFF); //info 6, PSEC2 bit(11-0)
     checkAndInsert("trigger_sma_invert", (ac_info[3][5] & 0x2) >> 1); // Info 6, PSEC3 bit(1)
-    checkAndInsert("trigger_sma_detection_mode", ac_info[3][5] & 0x1); // Info 6, PSEC3 bit(0)
-    checkAndInsert("trigger_acc_invert", (ac_info[3][5] & 0x8) >> 3); // Info 6, PSEC3 bit(3)
-    checkAndInsert("trigger_acc_detection_mode", (ac_info[3][5] & 0x4) >> 2); // Info 6, PSEC3 bit(2)
+    //checkAndInsert("trigger_sma_detection_mode", ac_info[3][5] & 0x1); // Info 6, PSEC3 bit(0)
+    //checkAndInsert("trigger_acc_invert", (ac_info[3][5] & 0x8) >> 3); // Info 6, PSEC3 bit(3)
+    //checkAndInsert("trigger_acc_detection_mode", (ac_info[3][5] & 0x4) >> 2); // Info 6, PSEC3 bit(2)
     checkAndInsert("trigger_self_sign", (ac_info[3][5] & 0x20) >> 5); //Info 6, PSEC3 bit(5)
-    checkAndInsert("trigger_self_detection_mode", (ac_info[3][5] & 0x1) >> 4); // Info 6, PSEC3 bit(4)
+    //checkAndInsert("trigger_self_detection_mode", (ac_info[3][5] & 0x1) >> 4); // Info 6, PSEC3 bit(4)
     checkAndInsert("trigger_self_coin", (ac_info[3][5] & 0x7C0) >> 6); // Info 6, PSEC3 bit(10-6)
 
     checkAndInsert("trigger_selfmask_0", ac_info[0][6]); //Info 7 PSEC0
@@ -297,14 +297,14 @@ void Metadata::initializeMetadataKeys()
 
     //Trigger PSEC settings
     metadata_keys.push_back("trigger_mode"); //Info 6, PSEC1 bit(3-0)
-    metadata_keys.push_back("trigger_validation_window_start"); //Info 6, PSEC1 bit(15-4)
-    metadata_keys.push_back("trigger_validation_window_length"); //info 6, PSEC2 bit(11-0)
+    //metadata_keys.push_back("trigger_validation_window_start"); //Info 6, PSEC1 bit(15-4)
+    //metadata_keys.push_back("trigger_validation_window_length"); //info 6, PSEC2 bit(11-0)
     metadata_keys.push_back("trigger_sma_invert"); // Info 6, PSEC3 bit(1)
-    metadata_keys.push_back("trigger_sma_detection_mode"); // Info 6, PSEC3 bit(0)
-    metadata_keys.push_back("trigger_acc_invert"); // Info 6, PSEC3 bit(3)
-    metadata_keys.push_back("trigger_acc_detection_mode"); // Info 6, PSEC3 bit(2)
+    //metadata_keys.push_back("trigger_sma_detection_mode"); // Info 6, PSEC3 bit(0)
+    //metadata_keys.push_back("trigger_acc_invert"); // Info 6, PSEC3 bit(3)
+    //metadata_keys.push_back("trigger_acc_detection_mode"); // Info 6, PSEC3 bit(2)
     metadata_keys.push_back("trigger_self_sign"); //Info 6, PSEC3 bit(5)
-    metadata_keys.push_back("trigger_self_detection_mode"); // Info 6, PSEC3 bit(4)
+    //metadata_keys.push_back("trigger_self_detection_mode"); // Info 6, PSEC3 bit(4)
     metadata_keys.push_back("trigger_self_coin"); // Info 6, PSEC3 bit(10-6)
 
     metadata_keys.push_back("trigger_selfmask_0"); //Info 7 PSEC0

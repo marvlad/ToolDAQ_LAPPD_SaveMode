@@ -9,17 +9,9 @@
 
 using namespace std;
 
-ACDC::ACDC()
-{
-	trigMask = 0xFFFFFF;
-}
+ACDC::ACDC(){}
 
-
-
-ACDC::~ACDC()
-{
-	cout << "Calling acdc destructor" << endl;
-}
+ACDC::~ACDC(){}
 
 int ACDC::getBoardIndex()
 {
@@ -29,20 +21,6 @@ int ACDC::getBoardIndex()
 void ACDC::setBoardIndex(int bi)
 {
 	boardIndex = bi;
-}
-
-
-//utility for debugging
-void ACDC::writeRawBufferToFile(vector<unsigned short> lastAcdcBuffer)
-{
-    string fnnn = "raw-acdc-buffer.txt";
-    cout << "Printing ACDC buffer to file : " << fnnn << endl;
-    ofstream cb(fnnn);
-    for(unsigned short k: lastAcdcBuffer)
-    {
-        cb << hex << k << endl;
-    }
-    cb.close();
 }
 
 //looks at the last ACDC buffer and organizes
@@ -106,7 +84,7 @@ int ACDC::parseDataFromBuffer(vector<unsigned short> acdc_buffer)
         	start_indices.push_back(dist);
         }
 	}
-	
+
 	if(start_indices.size()>NUM_PSEC)
 	{
 		for(int k=0; k<(int)start_indices.size()-1; k++)
@@ -149,7 +127,7 @@ int ACDC::parseDataFromBuffer(vector<unsigned short> acdc_buffer)
 		vector<double> infobytes;
 		while(*bit != endword && *bit != endoffile)
 		{
-			infobytes.push_back((double)*bit);
+			infobytes.push_back(*bit);
 			if(infobytes.size()==NUM_SAMP)
 			{
 				data[channel_count] = infobytes;
@@ -191,99 +169,6 @@ int ACDC::parseDataFromBuffer(vector<unsigned short> acdc_buffer)
 	return 0;
 }
 
-//writes data from the presently stored event
-// to file assuming file has header already
-void ACDC::writeRawDataToFile(vector<unsigned short> buffer, ofstream& d)
-{
-	for(unsigned short k: buffer)
-	{
-		d << hex <<  k << " ";
-	}
-	d << endl;
-	d.close();
-	return;
-}
-
-//reads pedestals to file in a new
-//file format relative to the old software. 
-//<channel> <sample 1> <sample 2> ...
-//<channel> ...
-//samples in ADC counts. 
-void ACDC::readPedsFromFile(ifstream& ifs, int bi)
-{
-	char delim = ' '; //in between ADC counts
-	map<int, vector<double>> tempPeds;//temporary holder for the new pedestal map
-
-
-	//temporary variables for line parsing
-	string lineFromFile; //full line
-	string adcCountStr; //string representing adc counts of ped
-	double avg; //int for the current channel key
-	int ch=0;
-
-	//loop over each line of file
-	for(int i=0; i<NUM_SAMP; i++)
-	{
-		getline(ifs, lineFromFile);
-		stringstream line(lineFromFile); //stream of characters delimited
-
-		//loop over each sample index
-		for(int j=0; j<NUM_CH; j++)
-		{
-			getline(line, adcCountStr, delim);
-			avg = stod(adcCountStr); //channel key for a while
-			tempPeds[j].push_back(avg);
-		}
-	}
-
-	//call public member of this class to set the pedestal map
-	setPeds(tempPeds, bi);
-}
-
-
-//reads LUT conversions to file in a new
-//file format relative to the old software. 
-//<channel> <sample 1> <sample 2> ...
-//<channel> ...
-//samples in ADC counts. 
-void ACDC::readConvsFromFile(ifstream& ifs)
-{
-	char delim = ' '; //in between ADC counts
-	map<int, vector<double>> tempConvs;//temporary holder for the new conversion map
-
-	//temporary variables for line parsing
-	string lineFromFile; //full line
-	string adcCountStr; //string representing adc counts of conv
-	int ch; //int for the current channel key
-	vector<double> tempWav; //conv wav temporary 
-	bool isChannel; //is this character the channel key
-
-	//loop over each line of file
-	while(getline(ifs, lineFromFile))
-	{
-		stringstream line(lineFromFile); //stream of characters delimited
-		isChannel = true; //first character is the channel key
-		tempWav.clear(); //fresh vector
-		//loop over each sample index
-		while(getline(line, adcCountStr, delim))
-		{
-			if(isChannel)
-			{
-				ch = stoi(adcCountStr); //channel key for a while
-				isChannel = false;
-				continue; //go to next delimited word (start of adcCounts)
-			}
-			tempWav.push_back(stod(adcCountStr)); //conversions in adcCounts
-		}
-
-		//now set this vector to the appropriate conv map element
-		tempConvs.insert(pair<int, vector<double>>(ch, tempWav));
-	}
-
-	//call public member of this class to set the conversion map
-	setConv(tempConvs);
-	return;
-}
 
 void ACDC::writeErrorLog(string errorMsg)
 {

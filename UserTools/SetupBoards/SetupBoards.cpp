@@ -26,10 +26,6 @@ bool SetupBoards::Execute(){
 	if(m_data->conf.receiveFlag==0)	
 	{
 		m_variables.Get("Triggermode",m_data->conf.triggermode);	
-	
-		m_variables.Get("ACC_Mode",m_data->conf.ACC_Mode);
-		m_variables.Get("ACDC_Mode",m_data->conf.ACDC_Mode);
-		m_variables.Get("SELF_Mode",m_data->conf.SELF_Mode);
 
 		m_variables.Get("ACC_Sign",m_data->conf.ACC_Sign);
 		m_variables.Get("ACDC_Sign",m_data->conf.ACDC_Sign);
@@ -73,11 +69,6 @@ bool SetupBoards::Execute(){
 	if(m_data->conf.receiveFlag==0 || m_data->conf.receiveFlag==1)
 	{
 		//trigger settings
-		////detection mode
-		m_data->acc->setDetectionMode(m_data->conf.ACC_Mode, 2);
-		m_data->acc->setDetectionMode(m_data->conf.ACDC_Mode, 3);
-		m_data->acc->setDetectionMode(m_data->conf.SELF_Mode, 4);
-
 		////polarity
 		m_data->acc->setSign(m_data->conf.ACC_Sign, 2);
 		m_data->acc->setSign(m_data->conf.ACDC_Sign, 3);
@@ -130,6 +121,17 @@ bool SetupBoards::Execute(){
 		////set mask
 		m_data->acc->setPedestals(m_data->conf.ACDC_mask,m_data->conf.Pedestal_channel_mask,pedestal);
 
+
+		//pps settings
+		unsigned int ppsratio;
+		stringstream ss5;
+		ss5 << std::hex << m_data->conf.PPSRatio;
+		ppsratio = std::stoul(ss5.str(),nullptr,16);
+		m_data->acc->setPPSRatio(ppsratio);
+		
+		m_data->acc->setPPSBeamMultiplexer(m_data->conf.PPSBeamMultiplexer);
+			
+
 		int retval;
 		retval = m_data->acc->initializeForDataReadout(m_data->conf.triggermode, m_data->conf.ACDC_mask, m_data->conf.Calibration_Mode);
 		if(retval != 0)
@@ -143,15 +145,14 @@ bool SetupBoards::Execute(){
 
 		m_data->conf.receiveFlag = 2;
 
-		m_data->psec.AccInfoFrame = m_data->acc->readAccBuffer();
-
 		m_data->acc->emptyUsbLine();
-		m_data->acc->dumpData();
+		m_data->acc->dumpData(0xFF);
 	}
 
 	if(m_data->psec.readRetval!=0)
 	{
-		m_data->acc->dumpData();
+		m_data->acc->dumpData(0xFF);
+		m_data->acc->emptyUsbLine();
 	}
 	return true;
 }
