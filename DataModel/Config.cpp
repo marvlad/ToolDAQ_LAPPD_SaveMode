@@ -10,20 +10,15 @@ bool Config::Send(zmq::socket_t* sock){
   zmq::message_t msg2(sizeof triggermode);
   memcpy(msg2.data(), &triggermode, sizeof triggermode);
 
-  zmq::message_t msg3(sizeof ACC_Mode);
-  memcpy(msg3.data(), &ACC_Mode, sizeof ACC_Mode);
 
   zmq::message_t msg4(sizeof ACC_Sign);
   memcpy(msg4.data(), &ACC_Sign, sizeof ACC_Sign);
 
-  zmq::message_t msg5(sizeof ACDC_Mode);
-  memcpy(msg5.data(), &ACDC_Mode, sizeof ACDC_Mode);
 
   zmq::message_t msg6(sizeof ACDC_Sign);
   memcpy(msg6.data(), &ACDC_Sign, sizeof ACDC_Sign);      
 
-  zmq::message_t msg7(sizeof SELF_Mode);
-  memcpy(msg7.data(), &SELF_Mode, sizeof SELF_Mode);
+
 
   zmq::message_t msg8(sizeof SELF_Sign);
   memcpy(msg8.data(), &SELF_Sign, sizeof SELF_Sign);
@@ -87,11 +82,11 @@ bool Config::Send(zmq::socket_t* sock){
 
   sock->send(msg1,ZMQ_SNDMORE);
   sock->send(msg2,ZMQ_SNDMORE);
-  sock->send(msg3,ZMQ_SNDMORE);
+
   sock->send(msg4,ZMQ_SNDMORE);
-  sock->send(msg5,ZMQ_SNDMORE);
+
   sock->send(msg6,ZMQ_SNDMORE);
-  sock->send(msg7,ZMQ_SNDMORE);
+
   sock->send(msg8,ZMQ_SNDMORE);
   sock->send(msg9,ZMQ_SNDMORE);
   sock->send(msg10,ZMQ_SNDMORE);
@@ -127,16 +122,13 @@ bool Config::Receive(zmq::socket_t* sock){
   //trigger
   sock->recv(&msg);
   triggermode=*(reinterpret_cast<int*>(msg.data()));
-  sock->recv(&msg);
-  ACC_Mode=*(reinterpret_cast<int*>(msg.data()));
+
   sock->recv(&msg);
   ACC_Sign=*(reinterpret_cast<int*>(msg.data()));
-  sock->recv(&msg);
-  ACDC_Mode=*(reinterpret_cast<int*>(msg.data()));
+
   sock->recv(&msg);
   ACDC_Sign=*(reinterpret_cast<int*>(msg.data()));
-  sock->recv(&msg);
-  SELF_Mode=*(reinterpret_cast<int*>(msg.data()));
+
   sock->recv(&msg);
   SELF_Sign=*(reinterpret_cast<int*>(msg.data()));
   sock->recv(&msg);
@@ -198,11 +190,11 @@ bool Config::SetDefaults(){
   triggermode=1;
 
   //triggersettings
-  ACC_Mode=0;
+
   ACC_Sign=0;
-  ACDC_Mode=0;
+
   ACDC_Sign=0;
-  SELF_Mode=0;
+
   SELF_Sign=0;
   SELF_Enable_Coincidence=0;
   SELF_Coincidence_Number=0;
@@ -235,6 +227,9 @@ bool Config::SetDefaults(){
   //Pedestal set value channel
   Pedestal_channel=3000;
   Pedestal_channel_mask=0x1F;
+	
+  PPSRatio = 0x0001;
+  PPSBeamMultiplexer = 1;
 
   return true;
 }
@@ -247,11 +242,11 @@ bool Config::Print(){
   printf("Raw_Mode: %i\n",(int)Raw_Mode);
   std::cout << "------------------Trigger settings------------------" << std::endl;
   printf("Triggermode: %i\n",triggermode);
-  printf("ACC trigger Mode: %i\n", ACC_Mode);
+
   printf("ACC trigger Sign: %i\n", ACC_Sign);
-  printf("ACDC trigger Mode: %i\n", ACDC_Mode);
+
   printf("ACDC trigger Sign: %i\n", ACDC_Sign);
-  printf("Selftrigger Mode: %i\n", SELF_Mode);
+
   printf("Selftrigger Sign: %i\n", SELF_Sign);
   printf("Coincidence Mode: %i\n", SELF_Enable_Coincidence);
   printf("Required Coincidence Channels: %d\n", SELF_Coincidence_Number);
