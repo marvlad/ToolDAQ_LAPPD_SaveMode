@@ -23,11 +23,8 @@ class Config : public SerialisableObject{
   int triggermode;
 
   //triggersettings
-  int ACC_Mode;
   int ACC_Sign;
-  int ACDC_Mode;
   int ACDC_Sign;
-  int SELF_Mode;
   int SELF_Sign;
   int SELF_Enable_Coincidence;
   int SELF_Coincidence_Number;
@@ -60,7 +57,11 @@ class Config : public SerialisableObject{
   //Pedestal set value channel
   int Pedestal_channel;
   unsigned int Pedestal_channel_mask;
-
+ 
+ //PPS
+ unsigned int PPSRatio;
+ int PPSBeamMultiplexer;
+ 
   bool SetDefaults();
   bool Print();
 
