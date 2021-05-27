@@ -63,7 +63,12 @@ bool SetupBoards::Execute(){
 		m_data->conf.ACDC_mask = std::stoul(tempPsecChannelMask,nullptr,16);		
 
 		m_variables.Get("Calibration_Mode",m_data->conf.Calibration_Mode);
-		m_variables.Get("Raw_Mode",m_data->conf.Raw_Mode);								
+		m_variables.Get("Raw_Mode",m_data->conf.Raw_Mode);
+		
+		string tempPPSRatio;
+		m_variables.Get("PPS_Ratio",tempPPSRatio);
+		m_data->conf.PPSRatio = std::stoul(tempPPSRatio,nullptr,16);	
+		m_variables.Get("PPS_Mux",m_data->conf.PPSBeamMultiplexer);
 	}
 
 	if(m_data->conf.receiveFlag==0 || m_data->conf.receiveFlag==1)
