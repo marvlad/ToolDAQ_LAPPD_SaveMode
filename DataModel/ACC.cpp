@@ -574,7 +574,7 @@ int ACC::readAcdcBuffers(bool raw, string timestamp)
 		dataofs.open(datafn.c_str(), ios::app);
 		writePsecData(dataofs, boardsReadyForRead);
 	}
-
+/*
 	command = 0xFFB54000;
 	usbcheck=usb->sendData(command); if(usbcheck==false){writeErrorLog("Send Error");}	
 	command = 0xFFD00000;
@@ -599,7 +599,7 @@ int ACC::readAcdcBuffers(bool raw, string timestamp)
 		{
 			std::cout << "Board " << i << " got =/= 32 words!" << std::endl;
 			map_acdcIF[i] = {0};
-		}
+		}*/
 	}
 
 	return 0;
@@ -837,7 +837,7 @@ int ACC::listenForAcdcData(int trigMode, bool raw, string timestamp)
 		dataofs.open(datafn.c_str(), ios::app); 
 		writePsecData(dataofs, boardsReadyForRead);
 	}
-
+/*
 	command = 0xFFB54000;
 	usbcheck=usb->sendData(command); if(usbcheck==false){writeErrorLog("Send Error");}	
 	command = 0xFFD00000;
@@ -862,7 +862,7 @@ int ACC::listenForAcdcData(int trigMode, bool raw, string timestamp)
 		{
 			std::cout << "Board " << i << " got =/= 32 words!" << std::endl;
 			map_acdcIF[i] = {0};
-		}
+		}*/
 	}
 
 	return 0;
