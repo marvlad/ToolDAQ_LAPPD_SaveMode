@@ -71,11 +71,8 @@ class Config : public SerialisableObject{
 
   ar & receiveFlag;
   ar & triggermode;
-  ar & ACC_Mode;
   ar & ACC_Sign;
-  ar & ACDC_Mode;
   ar & ACDC_Sign;
-  ar & SELF_Mode;
   ar & SELF_Sign;
   ar & SELF_Enable_Coincidence;
   ar & SELF_Coincidence_Number;
@@ -108,6 +105,9 @@ class Config : public SerialisableObject{
   //Pedestal set value channel
   ar & Pedestal_channel;
   ar & Pedestal_channel_mask;
+  
+  ar & PPSRatio;
+  ar & PPSBeamMultiplexer;
   
  }
  
