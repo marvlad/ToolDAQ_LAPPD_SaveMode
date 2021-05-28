@@ -9,6 +9,15 @@ bool SetupBoards::Initialise(std::string configfile, DataModel &data){
 	//m_variables.Print();
 
 	system("mkdir -p Results");
+	
+	std::cout << "----------------------------------------------------------------------" << std::endl;
+	std::cout << "                             Hello  Julie                             " << std::endl;
+	std::cout << "                         This is version v2.01                        " << std::endl;
+	std::cout << " The latest changes were:                                             " << std::endl;
+	std::cout << " - Added the new PPS functionality                                    " << std::endl;
+	std::cout << " - Added a filter for \'ff\'                                          " << std::endl;
+	std::cout << " - Added a switch to save da                                          " << std::endl;
+	std::cout << "----------------------------------------------------------------------" << std::endl;
 
 	m_data= &data;
 	m_log= m_data->Log;
