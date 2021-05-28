@@ -519,11 +519,11 @@ int ACC::readAcdcBuffers(bool raw, string timestamp)
 			writeErrorLog(err_msg);
 			return 1;
 		}
-		if(acdc_buffer[0] != 0x1234)
-		{
-			acdc_buffer.clear();
-			return 4;
-		}
+		//if(acdc_buffer[0] != 0x1234)
+		//{
+		//	acdc_buffer.clear();
+		//	return 4;
+		//}
 
 		
 		//save this buffer a private member of ACDC
@@ -789,11 +789,11 @@ int ACC::listenForAcdcData(int trigMode, bool raw, string timestamp)
 			writeErrorLog(err_msg);
 			return 1;
 		}
-		if(acdc_buffer[0] != 0x1234)
-		{
-			acdc_buffer.clear();
-			return 4;
-		}
+		//if(acdc_buffer[0] != 0x1234)
+		//{
+		//	acdc_buffer.clear();
+		//	return 4;
+		//}
 
 
 		//save this buffer a private member of ACDC
