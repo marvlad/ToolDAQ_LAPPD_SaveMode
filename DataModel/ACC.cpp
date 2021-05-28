@@ -515,6 +515,10 @@ int ACC::readAcdcBuffers(bool raw, string timestamp)
 			writeErrorLog(err_msg);
 			return 1;
 		}
+		if(acdc_buffer[0] != 0x1234)
+		{
+			acdc_buffer.clear();
+		}
 
 		
 		//save this buffer a private member of ACDC
