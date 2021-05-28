@@ -402,13 +402,15 @@ int ACC::readAcdcBuffers(bool raw, string timestamp)
 	unsigned int command;
 	int maxCounter=0;
 	bool clearCheck;
+	string outfilename;
+	string datafn;
+	ofstream dataofs;
 
 	//filename logistics
 	if(strcmp(timestamp.c_str(),"NoSave")!=0)
 	{
-		string outfilename = "./Results/";
-		string datafn;
-		ofstream dataofs;
+		outfilename = "./Results/";
+
 	}
 	//Enables the transfer of data from ACDC to ACC
    	enableTransfer(1);
@@ -619,13 +621,15 @@ int ACC::listenForAcdcData(int trigMode, bool raw, string timestamp)
 	map<int,int> readoutSize;
 	unsigned int command; 
 	bool clearCheck;
+	string outfilename;
+	string datafn;
+	ofstream dataofs;
 
 	//filename logistics
 	if(strcmp(timestamp.c_str(),"NoSave")!=0)
 	{
-		string outfilename = "./Results/";
-		string datafn;
-		ofstream dataofs;
+		outfilename = "./Results/";
+
 	}
 
 	//this function is simply readAcdcBuffers
