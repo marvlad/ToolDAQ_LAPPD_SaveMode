@@ -28,7 +28,7 @@ bool ListenForData::Execute(){
 		m_data->acc->softwareTrigger();
 	}
 
-	if (counter>=1000)
+	if (counter>=100000)
 	{
 		counter=0;
 		timestamp = getTime();
