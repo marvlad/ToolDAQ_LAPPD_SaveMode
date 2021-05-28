@@ -13,7 +13,7 @@ bool ListenForData::Initialise(std::string configfile, DataModel &data){
 
 	if(!m_variables.Get("verbose",m_verbose)) m_verbose=1;
 
-	
+	timestamp = getTime();
 
 	return true;
 }
