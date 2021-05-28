@@ -603,8 +603,8 @@ int ACC::readAcdcBuffers(bool raw, string timestamp)
 		{
 			std::cout << "Board " << i << " got =/= 32 words!" << std::endl;
 			map_acdcIF[i] = {0};
-		}*/
-	}
+		}
+	}*/
 
 	return 0;
 }
@@ -870,8 +870,8 @@ int ACC::listenForAcdcData(int trigMode, bool raw, string timestamp)
 		{
 			std::cout << "Board " << i << " got =/= 32 words!" << std::endl;
 			map_acdcIF[i] = {0};
-		}*/
-	}
+		}
+	}*/
 
 	return 0;
 }
