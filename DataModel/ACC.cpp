@@ -522,6 +522,7 @@ int ACC::readAcdcBuffers(bool raw, string timestamp)
 		if(acdc_buffer[0] != 0x1234)
 		{
 			acdc_buffer.clear();
+			return 4;
 		}
 
 		
@@ -791,6 +792,7 @@ int ACC::listenForAcdcData(int trigMode, bool raw, string timestamp)
 		if(acdc_buffer[0] != 0x1234)
 		{
 			acdc_buffer.clear();
+			return 4;
 		}
 
 
