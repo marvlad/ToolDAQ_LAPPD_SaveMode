@@ -20,6 +20,8 @@ bool ListenForData::Initialise(std::string configfile, DataModel &data){
 
 
 bool ListenForData::Execute(){
+	int saveswitch;
+	m_variables.Get("Save", saveswitch);
 
 	if(m_data->conf.triggermode==1)
 	{
@@ -30,6 +32,11 @@ bool ListenForData::Execute(){
 	{
 		counter=0;
 		timestamp = getTime();
+	}
+	
+	if(saveswitch==0)
+	{
+		timestamp = "NoSave";	
 	}
 
 
