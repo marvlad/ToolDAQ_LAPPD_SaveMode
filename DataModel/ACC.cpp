@@ -531,7 +531,7 @@ int ACC::readAcdcBuffers(bool raw, string timestamp)
 				int retval;
 
 				//If raw data is requested save and return 0
-				if(raw==true)
+				if(raw==true && strcmp(timestamp,"NoSave")!=0)
 				{
 					vbuffer = acdc_buffer;
 					string rawfn = outfilename + "Raw_" + timestamp + "_b" + to_string(bi) + ".txt";
@@ -572,7 +572,7 @@ int ACC::readAcdcBuffers(bool raw, string timestamp)
 			}
 		}
 	}
-	if(raw==false && strcmp(timestamp.c_str(),"Oscope_b")!=0)
+	if(raw==false && strcmp(timestamp,"NoSave")!=0)
 	{
 		datafn = outfilename + "Data_" + timestamp + ".txt";
 		dataofs.open(datafn.c_str(), ios::app);
@@ -795,7 +795,7 @@ int ACC::listenForAcdcData(int trigMode, bool raw, string timestamp)
 				int retval;
 
 				//If raw data is requested save and return 0
-				if(raw==true)
+				if(raw==true && strcmp(timestamp,"NoSave")!=0)
 				{
 					vbuffer = acdc_buffer;
 					string rawfn = outfilename + "Raw_" + timestamp + "_b" + to_string(bi) + ".txt";
@@ -839,7 +839,7 @@ int ACC::listenForAcdcData(int trigMode, bool raw, string timestamp)
 			}
 		}
 	}
-	if(raw==false && strcmp(timestamp.c_str(),"Oscope_b")!=0)
+	if(raw==false && strcmp(timestamp,"NoSave")!=0)
 	{
 		datafn = outfilename + "Data_" + timestamp + ".txt";
 		dataofs.open(datafn.c_str(), ios::app); 
