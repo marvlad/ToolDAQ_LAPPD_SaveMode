@@ -519,12 +519,6 @@ int ACC::readAcdcBuffers(bool raw, string timestamp)
 			writeErrorLog(err_msg);
 			return 1;
 		}
-		//if(acdc_buffer[0] != 0x1234)
-		//{
-		//	acdc_buffer.clear();
-		//	return 4;
-		//}
-
 		
 		//save this buffer a private member of ACDC
 		//by looping through our acdc vector
@@ -544,6 +538,11 @@ int ACC::readAcdcBuffers(bool raw, string timestamp)
 					break;
 				}else
 				{
+					if(acdc_buffer[0] != 0x1234)
+					{
+						acdc_buffer.clear();
+						return 4;
+					}
 					retval = a->parseDataFromBuffer(acdc_buffer); 
 					corruptBuffer = meta.parseBuffer(acdc_buffer);
 					if(corruptBuffer)
@@ -789,11 +788,6 @@ int ACC::listenForAcdcData(int trigMode, bool raw, string timestamp)
 			writeErrorLog(err_msg);
 			return 1;
 		}
-		//if(acdc_buffer[0] != 0x1234)
-		//{
-		//	acdc_buffer.clear();
-		//	return 4;
-		//}
 
 
 		//save this buffer a private member of ACDC
@@ -814,6 +808,12 @@ int ACC::listenForAcdcData(int trigMode, bool raw, string timestamp)
 					break;
 				}else
 				{
+					
+					if(acdc_buffer[0] != 0x1234)
+					{
+						acdc_buffer.clear();
+						return 4;
+					}
 					//parśe raw data to channel data and metadata
 					retval = a->parseDataFromBuffer(acdc_buffer); 
 					meta.checkAndInsert("Board", bi);
