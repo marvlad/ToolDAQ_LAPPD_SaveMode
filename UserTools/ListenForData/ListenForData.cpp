@@ -79,6 +79,8 @@ bool ListenForData::Finalise(){
   		{
 			std::cout << "Board " << it->first << " has " << it->second << " ff buffers" << std::endl; 
 		}
+	}catch{
+		std::cout << "Trouble" << std::endl;
 	}
 	delete m_data->acc;
 	return true;
