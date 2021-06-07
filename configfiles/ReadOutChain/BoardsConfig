@@ -3,7 +3,7 @@ Save 1
 
 #Trigger
 ##Triggermode
-Triggermode 1 #...
+Triggermode 9 #...
 
 ##ACC settings
 ACC_Sign 0 #normal(0) or inverted(1)
@@ -34,7 +34,7 @@ PSEC_Channel_Mask_3 0x00 #6 bit, each for a channel, from 0x00 to 0x3F
 PSEC_Channel_Mask_4 0x00 #6 bit, each for a channel, from 0x00 to 0x3F
 
 #Validation time
-Validation_Start 10 #value from 0 to 819 in us
+Validation_Start 5 #value from 0 to 819 in us
 Validation_Window 100 #value from 0 to 819 in us
 
 #Calibration mode
