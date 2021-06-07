@@ -50,13 +50,26 @@ bool ListenForData::Execute(){
 		counter++;
 	}
 
-	//m_data->psec.ReceiveData = m_data->acc->returnRaw();
-
+	map<int, vector<unsigned short>> rawmap;
+	rawmap = m_data->acc->returnRaw();
+  	for(std::map<int, vector<unsigned short>>::iterator it=rawmap.begin(); it!=rawmap.end(); ++it)
+  	{		
+		if(it->second[0] != 0x1234)
+		{
+			m_data->psec.FFCounter[it->first] += 1;
+		}
+	}
+	
 	return true;
 }
 
 
 bool ListenForData::Finalise(){
+	for(std::map<int, vector<unsigned short>>::iterator it=m_data->psec.FFCounter.begin(); it!=m_data->psec.FFCounter.end(); ++it)
+  	{
+		std::cout << "Board " << it->first << " has " << it->second << " ff buffers" << std::endl; 
+	}
+	
 	delete m_data->acc;
 	return true;
 }
