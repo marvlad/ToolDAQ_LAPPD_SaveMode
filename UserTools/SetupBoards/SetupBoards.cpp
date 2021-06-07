@@ -32,11 +32,13 @@ bool SetupBoards::Initialise(std::string configfile, DataModel &data){
 
 
 bool SetupBoards::Execute(){
-
+	int SMA;
+	
 	if(m_data->conf.receiveFlag==0)	
 	{
 		m_variables.Get("Triggermode",m_data->conf.triggermode);	
 
+		m_variables.Get("SMA",SMA);
 		m_variables.Get("ACC_Sign",m_data->conf.ACC_Sign);
 		m_variables.Get("ACDC_Sign",m_data->conf.ACDC_Sign);
 		m_variables.Get("SELF_Sign",m_data->conf.SELF_Sign);
@@ -109,7 +111,7 @@ bool SetupBoards::Execute(){
 		std::vector<int> tempPsecChipMask = {m_data->conf.PSEC_Chip_Mask_0,m_data->conf.PSEC_Chip_Mask_1,m_data->conf.PSEC_Chip_Mask_2,m_data->conf.PSEC_Chip_Mask_3,m_data->conf.PSEC_Chip_Mask_4};
 		std::vector<unsigned int> tempVecPsecChannelMask = {m_data->conf.PSEC_Channel_Mask_0,m_data->conf.PSEC_Channel_Mask_1,m_data->conf.PSEC_Channel_Mask_2,m_data->conf.PSEC_Channel_Mask_3,m_data->conf.PSEC_Channel_Mask_4};
 		std::vector<unsigned int> psecChipMask;
-	    std::vector<unsigned int> psecChannelMask;
+	    	std::vector<unsigned int> psecChannelMask;
 		for(int i=0; i<5; i++)
 		{
 			if(tempPsecChipMask[i]==1)
@@ -152,8 +154,15 @@ bool SetupBoards::Execute(){
 		m_data->acc->setPPSRatio(ppsratio);
 		
 		m_data->acc->setPPSBeamMultiplexer(m_data->conf.PPSBeamMultiplexer);
+		
+		if(SMA==0)
+		{
+			acc.setSMA_OFF();
+		}else if(SMA==1)
+		{
+			acc.setSMA_ON();
+		}
 			
-
 		int retval;
 		retval = m_data->acc->initializeForDataReadout(m_data->conf.triggermode, m_data->conf.ACDC_mask, m_data->conf.Calibration_Mode);
 		if(retval != 0)
