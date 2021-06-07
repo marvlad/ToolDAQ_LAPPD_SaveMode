@@ -38,7 +38,7 @@ public:
 	/*ID Nan: Returns the meta map*/
 	map<int, map<string, unsigned short>> returnMeta(){return map_meta;} 
 	/*ID Nan: Returns the raw data vector*/
-	vector<unsigned short> returnRaw(){return vbuffer;}
+	map<int,vector<unsigned short>> returnRaw(){return vbuffer;}
 	/*ID Nan: Returns the acdc info frame map*/
 	map<int, vector<unsigned short>> returnACDCIF(){return map_acdcIF;} 
 	/*ID Nan: Returns the acc info frame map*/
@@ -147,7 +147,7 @@ private:
 	vector<unsigned int> SELF_psec_chip_mask; //var: PSEC chips actove for self trigger
 	map<int, map<int, vector<double>>> map_data; //entire data map | index: board < channel < samplevector
 	map<int, map<string, unsigned short>> map_meta; //entire meta map | index: board < metakey < value
-	vector<unsigned short> vbuffer;
+	map<int, vector<unsigned short>> vbuffer;
 	map<int, vector<unsigned short>> map_acdcIF;
 	vector<unsigned short> map_accIF;
 
