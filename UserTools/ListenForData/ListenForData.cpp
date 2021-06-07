@@ -65,11 +65,12 @@ bool ListenForData::Execute(){
 
 
 bool ListenForData::Finalise(){
-	for(std::map<int, int>::iterator it=m_data->psec.FFCounter.begin(); it!=m_data->psec.FFCounter.end(); ++it)
-  	{
-		std::cout << "Board " << it->first << " has " << it->second << " ff buffers" << std::endl; 
+	try{
+		for(std::map<int, int>::iterator it=m_data->psec.FFCounter.begin(); it!=m_data->psec.FFCounter.end(); ++it)
+  		{
+			std::cout << "Board " << it->first << " has " << it->second << " ff buffers" << std::endl; 
+		}
 	}
-	
 	delete m_data->acc;
 	return true;
 }
