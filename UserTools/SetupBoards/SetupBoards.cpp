@@ -62,6 +62,7 @@ bool SetupBoards::Execute(){
 		m_variables.Get("PSEC_Channel_Mask_4",tempPsecChannelMask);
 		m_data->conf.PSEC_Channel_Mask_4 = std::stoul(tempPsecChannelMask,nullptr,16);	
 
+		m_variables.Get("Validation_Start",m_data->conf.Validation_Start);
 		m_variables.Get("Validation_Window",m_data->conf.Validation_Window);
 
 		m_variables.Get("Pedestal_channel",m_data->conf.Pedestal_channel);
@@ -120,10 +121,16 @@ bool SetupBoards::Execute(){
 		m_data->acc->setPsecChannelMask(psecChannelMask);
 
 		//validation window
+		unsigned int validationStart;
+		stringstream ss31;
+		ss31 << std::hex << (int)m_data->conf.Validation_Start*40;
+		validationStart = std::stoul(ss31.str(),nullptr,16);
+		m_data->acc->setValidationStart(validationStart);		
+		
 		unsigned int validationWindow;
-		stringstream ss3;
-		ss3 << std::hex << m_data->conf.Validation_Window*160;
-		validationWindow = std::stoul(ss3.str(),nullptr,16);
+		stringstream ss32;
+		ss32 << std::hex << (int)m_data->conf.Validation_Window*40;
+		validationWindow = std::stoul(ss32.str(),nullptr,16);
 		m_data->acc->setValidationWindow(validationWindow);
 
 		//pedestal set
