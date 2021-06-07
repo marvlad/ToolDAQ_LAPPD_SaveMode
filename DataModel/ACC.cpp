@@ -532,7 +532,7 @@ int ACC::readAcdcBuffers(bool raw, string timestamp)
 				//If raw data is requested save and return 0
 				if(raw==true && strcmp(timestamp.c_str(),"NoSave")!=0)
 				{
-					vbuffer = acdc_buffer;
+					vbuffer[bi] = acdc_buffer;
 					string rawfn = outfilename + "Raw_" + timestamp + "_b" + to_string(bi) + ".txt";
 					writeRawDataToFile(acdc_buffer, rawfn);
 					break;
@@ -802,7 +802,7 @@ int ACC::listenForAcdcData(int trigMode, bool raw, string timestamp)
 				//If raw data is requested save and return 0
 				if(raw==true && strcmp(timestamp.c_str(),"NoSave")!=0)
 				{
-					vbuffer = acdc_buffer;
+					vbuffer[bi] = acdc_buffer;
 					string rawfn = outfilename + "Raw_" + timestamp + "_b" + to_string(bi) + ".txt";
 					writeRawDataToFile(acdc_buffer, rawfn);
 					break;
