@@ -46,8 +46,8 @@ class Config : public SerialisableObject{
   unsigned int PSEC_Channel_Mask_4;
 
   //Validation time
-  int Validation_Start;
-  int Validation_Window;
+  float Validation_Start;
+  float Validation_Window;
 
   //Calibration mode
   int Calibration_Mode;
