@@ -14,7 +14,16 @@ bool ListenForData::Initialise(std::string configfile, DataModel &data){
 	if(!m_variables.Get("verbose",m_verbose)) m_verbose=1;
 
 	timestamp = getTime();
-
+	
+	m_data->psec.FFCounter[0] = 0;
+	m_data->psec.FFCounter[1] = 0;
+	m_data->psec.FFCounter[2] = 0;
+	m_data->psec.FFCounter[3] = 0;
+	m_data->psec.FFCounter[4] = 0;
+	m_data->psec.FFCounter[5] = 0;
+	m_data->psec.FFCounter[6] = 0;
+	m_data->psec.FFCounter[7] = 0;
+	
 	return true;
 }
 
@@ -54,7 +63,7 @@ bool ListenForData::Execute(){
 	rawmap = m_data->acc->returnRaw();
   	for(std::map<int, vector<unsigned short>>::iterator it=rawmap.begin(); it!=rawmap.end(); ++it)
   	{		
-		if(it->second[0] != 0x1234)
+		if(it->second.at(0) != 0x1234)
 		{
 			m_data->psec.FFCounter[it->first] += 1;
 		}
