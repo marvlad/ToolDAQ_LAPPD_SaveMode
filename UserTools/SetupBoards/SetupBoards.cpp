@@ -12,12 +12,13 @@ bool SetupBoards::Initialise(std::string configfile, DataModel &data){
 	
 	std::cout << "----------------------------------------------------------------------" << std::endl;
 	std::cout << "                             Hello  Julie                             " << std::endl;
-	std::cout << "                         This is version v2.02                        " << std::endl;
+	std::cout << "                         This is version v2.03                        " << std::endl;
 	std::cout << " The latest changes were:                                             " << std::endl;
 	std::cout << " - Added the new PPS functionality                                    " << std::endl;
 	std::cout << " - Added a filter for \'ff\'                                          " << std::endl;
 	std::cout << " - Added a switch to save data                                        " << std::endl;
 	std::cout << " - Added counter for failed \'ff\' buffers                            " << std::endl;
+	std::cout << " - Added a switch for the new commands with 0xFF9                     " << std::endl;
 	std::cout << "----------------------------------------------------------------------" << std::endl;
 
 	m_data= &data;
