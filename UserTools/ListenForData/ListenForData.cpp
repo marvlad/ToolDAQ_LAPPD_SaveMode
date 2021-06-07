@@ -74,14 +74,15 @@ bool ListenForData::Execute(){
 
 
 bool ListenForData::Finalise(){
-	try{
+	if(m_data->psec.FFCounter.size>0){
 		for(std::map<int, int>::iterator it=m_data->psec.FFCounter.begin(); it!=m_data->psec.FFCounter.end(); ++it)
   		{
 			std::cout << "Board " << it->first << " has " << it->second << " ff buffers" << std::endl; 
 		}
-	}catch{
+	}else{
 		std::cout << "Trouble" << std::endl;
 	}
+	
 	delete m_data->acc;
 	return true;
 }
