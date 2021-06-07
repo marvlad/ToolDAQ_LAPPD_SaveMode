@@ -158,10 +158,10 @@ bool SetupBoards::Execute(){
 		
 		if(SMA==0)
 		{
-			acc.setSMA_OFF();
+			m_data->acc->setSMA_OFF();
 		}else if(SMA==1)
 		{
-			acc.setSMA_ON();
+			m_data->acc->setSMA_ON();
 		}
 			
 		int retval;
