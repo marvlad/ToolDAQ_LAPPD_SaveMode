@@ -1,6 +1,9 @@
 #Overall ACC/ACDC config file
 Save 1
 
+#SMA set
+0
+
 #Trigger
 ##Triggermode
 Triggermode 1 #...
