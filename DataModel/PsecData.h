@@ -21,6 +21,7 @@ class PsecData{
   bool Receive(zmq::socket_t* sock);
 
   map<int, vector<unsigned short>> ReceiveData;
+  map<int,int> FFCounter;
 
   int BoardIndex;
   unsigned int VersionNumber = 0x0001;
