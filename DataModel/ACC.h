@@ -120,6 +120,9 @@ public:
 	void writeErrorLog(string errorMsg); //writes an errorlog with timestamps for debugging
 	void writePsecData(ofstream& d, vector<int> boardsReadyForRead); //main write for the data map
 	void writeRawDataToFile(vector<unsigned short> buffer, string rawfn); //main write for the raw data vector
+	
+	void setSMA_ON();
+	void setSMA_OFF();
 
 private:
 	/*------------------------------------------------------------------------------------*/
