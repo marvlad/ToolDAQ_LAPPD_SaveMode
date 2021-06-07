@@ -332,7 +332,7 @@ int ACC::initializeForDataReadout(int trigMode, unsigned int boardMask, int cali
 
 	command = 0x00340000;
 	command = command | PPSRatio;
-	printf("cmd: 0x%08x\n", command); 
+	//printf("cmd: 0x%08x\n", command); 
 	usbcheck=usb->sendData(command); if(usbcheck==false){writeErrorLog("Send Error");}	
 	return 0;
 }
