@@ -15,14 +15,14 @@ bool ListenForData::Initialise(std::string configfile, DataModel &data){
 
 	timestamp = getTime();
 	
-	m_data->psec.FFCounter[0] = 0;
-	m_data->psec.FFCounter[1] = 0;
-	m_data->psec.FFCounter[2] = 0;
-	m_data->psec.FFCounter[3] = 0;
-	m_data->psec.FFCounter[4] = 0;
-	m_data->psec.FFCounter[5] = 0;
-	m_data->psec.FFCounter[6] = 0;
-	m_data->psec.FFCounter[7] = 0;
+	m_data->psec.FFCounter.insert(pair<int,int>(0, 0));
+	m_data->psec.FFCounter.insert(pair<int,int>(1, 0));
+	m_data->psec.FFCounter.insert(pair<int,int>(2, 0));
+	m_data->psec.FFCounter.insert(pair<int,int>(3, 0));
+	m_data->psec.FFCounter.insert(pair<int,int>(4, 0));
+	m_data->psec.FFCounter.insert(pair<int,int>(5, 0));
+	m_data->psec.FFCounter.insert(pair<int,int>(6, 0));
+	m_data->psec.FFCounter.insert(pair<int,int>(7, 0));
 	
 	return true;
 }
