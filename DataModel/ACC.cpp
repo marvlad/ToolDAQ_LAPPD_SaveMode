@@ -532,12 +532,15 @@ int ACC::readAcdcBuffers(bool raw, string timestamp)
 				//If raw data is requested save and return 0
 				if(raw==true)
 				{
+					std::cout << "Taking raw data ";
 					vbuffer[bi] = acdc_buffer;
 					if(strcmp(timestamp.c_str(),"NoSave")!=0)
 					{
+						std::cout << "and saving data";
 						string rawfn = outfilename + "Raw_" + timestamp + "_b" + to_string(bi) + ".txt";
 						writeRawDataToFile(acdc_buffer, rawfn);
 					}
+					std::cout << std::endl;
 					break;
 				}else
 				{
