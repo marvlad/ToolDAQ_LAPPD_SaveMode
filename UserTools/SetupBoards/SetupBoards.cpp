@@ -12,7 +12,7 @@ bool SetupBoards::Initialise(std::string configfile, DataModel &data){
 	
 	std::cout << "----------------------------------------------------------------------" << std::endl;
 	std::cout << "                             Hello  Julie                             " << std::endl;
-	std::cout << "                         This is version v2.04                        " << std::endl;
+	std::cout << "                         This is version v2.05                        " << std::endl;
 	std::cout << " The latest changes were:                                             " << std::endl;
 	std::cout << " - Added the new PPS functionality                                    " << std::endl;
 	std::cout << " - Added a filter for \'ff\'                                          " << std::endl;
