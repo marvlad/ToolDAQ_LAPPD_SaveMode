@@ -52,6 +52,7 @@ bool ListenForData::Execute(){
 	m_data->psec.readRetval = m_data->acc->listenForAcdcData(m_data->conf.triggermode, m_data->conf.Raw_Mode, timestamp);
 	if(m_data->psec.readRetval != 0)
 	{
+		std::cout << "Read failed because " << m_data->psec.readRetval << std::endl;
 		m_data->psec.FailedReadCounter = m_data->psec.FailedReadCounter + 1;
 		m_data->psec.ReceiveData.clear();
 	}else if(m_data->psec.readRetval == 0)
