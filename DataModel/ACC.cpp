@@ -343,11 +343,11 @@ void ACC::setSoftwareTrigger(unsigned int boardMask)
 	unsigned int command;
 
 	//Set the trigger
-	command = 0x00B00001; //Sets the trigger of all ACDC boards to 1 = Software trigger
-	command = (command | (boardMask << 24)); 
-	usbcheck=usb->sendData(command); if(usbcheck==false){writeErrorLog("Send Error");}
 	command = 0x00300000; //Sets all ACDC boards to software trigger on the ACC 
 	command = (command | (boardMask << 4)) | 1; 
+	usbcheck=usb->sendData(command); if(usbcheck==false){writeErrorLog("Send Error");}
+	command = 0x00B00001; //Sets the trigger of all ACDC boards to 1 = Software trigger
+	command = (command | (boardMask << 24)); 
 	usbcheck=usb->sendData(command); if(usbcheck==false){writeErrorLog("Send Error");}
 }
 
