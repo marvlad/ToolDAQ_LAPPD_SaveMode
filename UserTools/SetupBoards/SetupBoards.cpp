@@ -11,7 +11,7 @@ bool SetupBoards::Initialise(std::string configfile, DataModel &data){
 	system("mkdir -p Results");
 	
 	std::cout << "----------------------------------------------------------------------" << std::endl;
-	std::cout << "                             Hello  Julie                             " << std::endl;
+	std::cout << "                                 Hello                                " << std::endl;
 	std::cout << "                         This is version v2.05                        " << std::endl;
 	std::cout << " The latest changes were:                                             " << std::endl;
 	std::cout << " - Added the new PPS functionality                                    " << std::endl;
