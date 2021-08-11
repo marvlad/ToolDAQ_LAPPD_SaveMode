@@ -29,39 +29,26 @@ bool ListenForData::Initialise(std::string configfile, DataModel &data){
 
 
 bool ListenForData::Execute(){
-	int saveswitch;
-	m_variables.Get("Save", saveswitch);
-
 	if(m_data->conf.triggermode==1)
 	{
 		m_data->acc->softwareTrigger();
 	}
 
-	if (counter>=100000)
-	{
-		counter=0;
-		timestamp = getTime();
-	}
-	
-	if(saveswitch==0)
-	{
-		timestamp = "NoSave";	
-	}
-
-
-	m_data->psec.readRetval = m_data->acc->listenForAcdcData(m_data->conf.triggermode, m_data->conf.Raw_Mode, timestamp);
+	m_data->psec.readRetval = m_data->acc->listenForAcdcData(m_data->conf.triggermode);
 	if(m_data->psec.readRetval != 0)
 	{
-		std::cout << "Read failed because " << m_data->psec.readRetval << std::endl;
 		m_data->psec.FailedReadCounter = m_data->psec.FailedReadCounter + 1;
 		m_data->psec.ReceiveData.clear();
-	}else if(m_data->psec.readRetval == 0)
+		m_data->psec.AccInfoFrame.clear();
+		return true;
+	}else
 	{
-		counter++;
+		m_data->psec.AccInfoFrame = m_data->acc->returnACCIF();
+		m_data->psec.ReceiveData = m_data->acc->returnRaw();
 	}
 
 	map<int, vector<unsigned short>> rawmap;
-	rawmap = m_data->acc->returnRaw();
+	rawmap = m_data->psec.ReceiveData;
   	for(std::map<int, vector<unsigned short>>::iterator it=rawmap.begin(); it!=rawmap.end(); ++it)
   	{		
 		if(it->second.at(0) != 0x1234)

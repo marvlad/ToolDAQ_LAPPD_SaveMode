@@ -1,5 +1,19 @@
 #Overall ACC/ACDC config file
-Save 1
+#0 = no Save
+#1 = Save to ASCII
+#2 = Save to Bianrydata -> Store
+#3 = Save to Raw
+Save 0
+
+path ./Results/LAPPD
+WaveformLabel LAPPDData
+AccLabel AccInfoFrame
+MetaLabel Metadata
+PPSLabel PPSFrames
+
+#Reset
+resetACC 0
+resetACDC 0
 
 #SMA set
 SMA 0

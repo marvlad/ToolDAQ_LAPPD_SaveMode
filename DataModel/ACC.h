@@ -14,8 +14,8 @@ using namespace std;
 #define MAX_NUM_BOARDS 8 // maxiumum number of ACDC boards connectable to one ACC 
 #define ACCFRAME 32
 #define ACDCFRAME 32
-#define PPSFRAME 16
 #define PSECFRAME 7795
+#define PPSFRAME 16
 
 class ACC
 {
@@ -33,46 +33,46 @@ public:
 	vector<int> getAlignedIndices(){return alignedAcdcIndices;}
 	/*ID Nan: Returns set triggermode */
 	int getTriggermode(){return trigMode;} 
-	/*ID Nan: Returns the data map*/
-	map<int, map<int, vector<double>>> returnData(){return map_data;} 
-	/*ID Nan: Returns the meta map*/
-	map<int, map<string, unsigned short>> returnMeta(){return map_meta;} 
-	/*ID Nan: Returns the raw data vector*/
-	map<int,vector<unsigned short>> returnRaw(){return vbuffer;}
+	/*ID Nan: Returns the raw data map*/
+	map<int, vector<unsigned short>> returnRaw(){return map_raw;}
 	/*ID Nan: Returns the acdc info frame map*/
 	map<int, vector<unsigned short>> returnACDCIF(){return map_acdcIF;} 
 	/*ID Nan: Returns the acc info frame map*/
 	vector<unsigned short> returnACCIF(){return map_accIF;} 
 	/*ID Nan: Returns the ACC info frame*/
 	vector<unsigned short> getACCInfoFrame();
+	/*ID Nan: Error management*/
+	void clearErrors(){errorcode.clear();}
+	vector<unsigned int> returnErrors()
+	{
+		if(errorcode.size()==0)
+		{
+			errorcode.push_back(returncode);
+		}
+		return errorcode;
+	}
 
 	/*------------------------------------------------------------------------------------*/
 	/*-------------------------Local set functions for board setup------------------------*/
 	/*-------------------Sets global variables, see below for description-----------------*/
-	void setNumChCoin(unsigned int in){SELF_number_channel_coincidence = in;} //sets the number of channels needed for self trigger coincidence	
-	void setEnableCoin(int in){SELF_coincidence_onoff = in;} //sets the enable coincidence requirement flag for the self trigger
-	void setThreshold(unsigned int in){SELF_threshold = in;} //sets the threshold for the self trigger
-	void setPsecChipMask(vector<unsigned int> in){SELF_psec_channel_mask = in;} //sets the PSEC chip mask to set individual chips for the self trigger 
-	void setPsecChannelMask(vector<unsigned int> in){SELF_psec_chip_mask = in;} //sets the PSEC channel mask to set individual channels for the self trigger 
-	void setValidationStart(unsigned int in){validation_start=in;} //sets the validation window start delay for required trigger modes
-	void setValidationWindow(unsigned int in){validation_window=in;} //sets the validation window length for required trigger modes
-	void setTriggermode(int in){trigMode = in;} //sets the overall triggermode
-	void setSign(int in, int source) //sets the sign (normal or inverted) for chosen source
+	void setNumChCoin(unsigned int in){SELF_number_channel_coincidence = in;} 
+	void setEnableCoin(int in){SELF_coincidence_onoff = in;} 
+	void setThreshold(unsigned int in){SELF_threshold = in;} 
+	void setPsecChipMask(vector<unsigned int> in){SELF_psec_channel_mask = in;} 
+	void setPsecChannelMask(vector<unsigned int> in){SELF_psec_chip_mask = in;} 
+	void setValidationStart(unsigned int in){validation_start=in;}
+	void setValidationWindow(unsigned int in){validation_window=in;} 
+	void setTriggermode(int in){trigMode = in;} 	
+	void setSign(int in, int source) 
 	{
-		if(source==2)
-		{
-			ACC_sign = in;
-		}else if(source==3)
-		{
-			ACDC_sign = in;
-		}else if(source==4)
-		{
-			SELF_sign = in;
-		}
+		if(source==2){ACC_sign = in;}
+		else if(source==3){ACDC_sign = in;}
+		else if(source==4){SELF_sign = in;}
 	}
 	void setPPSRatio(unsigned int in){PPSRatio = in;} 
 	void setPPSBeamMultiplexer(int in){PPSBeamMultiplexer = in;} 
 
+	
 	/*------------------------------------------------------------------------------------*/
 	/*-------------------------Local set functions for board setup------------------------*/
 	/*ID 7: Function to completly empty the USB line until the correct response is received*/
@@ -90,9 +90,9 @@ public:
 	/*ID 13: Fires the software trigger*/
 	void softwareTrigger(); 
 	/*ID 14: Software read function*/
-	int readAcdcBuffers(bool raw = false, string timestamp ="invalidTime"); 
+	//int readAcdcBuffers(); 
 	/*ID 15: Main listen fuction for data readout. Runs for 5s before retuning a negative*/
-	int listenForAcdcData(int trigMode, bool raw = false, string timestamp="invalidTime"); 
+	int listenForAcdcData(int trigMode); 
 	/*ID 16: Used to dis/enable transfer data from the PSEC chips to the buffers*/
 	void enableTransfer(int onoff=0); 
 	/*ID 17: Main init function that controls generalk setup as well as trigger settings*/
@@ -114,46 +114,43 @@ public:
 	//:::
 	void resetACDC(); //resets the acdc boards
 	void resetACC(); //resets the acdc boards 
-
 	/*------------------------------------------------------------------------------------*/
-	/*--------------------------------------Write functions-------------------------------*/
-	void writeErrorLog(string errorMsg); //writes an errorlog with timestamps for debugging
-	void writePsecData(ofstream& d, vector<int> boardsReadyForRead); //main write for the data map
-	void writeRawDataToFile(vector<unsigned short> buffer, string rawfn); //main write for the raw data vector
-	
+	/*--------------------------------Public gloabl variables-----------------------------*/
+	vector<unsigned int> errorcode;
+	unsigned int returncode = 0x00000000;
+
+	void writeErrorLog(string errorMsg);
 	void setSMA_ON();
 	void setSMA_OFF();
-
+	
 private:
 	/*------------------------------------------------------------------------------------*/
 	/*---------------------------------Load neccessary classes----------------------------*/
 	stdUSB* usb; //calls the usb class for communication
-	Metadata meta; //calls the metadata class for file write
 	vector<ACDC*> acdcs; //a vector of active acdc boards. 
 
-	//----------all neccessary global variables
-	bool usbcheck;
+	/*------------------------------------------------------------------------------------*/
+	/*-----------------------------Neccessary global variables----------------------------*/
 	int ACC_sign; //var: ACC sign (normal or inverted)
 	int ACDC_sign; //var: ACDC sign (normal or inverted)
 	int SELF_sign; //var: self trigger sign (normal or inverted)
 	int SELF_coincidence_onoff; //var: flag to enable self trigger coincidence
 	int trigMode; //var: decides the triggermode
+	int PPSBeamMultiplexer;
 	unsigned int SELF_number_channel_coincidence; //var: number of channels required in coincidence for the self trigger
 	unsigned int SELF_threshold; //var: threshold for the selftrigger
-	unsigned int validation_start;
+	unsigned int validation_start; //var: validation window for some triggermodes
 	unsigned int validation_window; //var: validation window for some triggermodes
 	unsigned int PPSRatio;
-	int PPSBeamMultiplexer;
 	vector<unsigned short> lastAccBuffer; //most recently received ACC buffer
 	vector<int> alignedAcdcIndices; //number relative to ACC index (RJ45 port) corresponds to the connected ACDC boards
 	vector<unsigned int> SELF_psec_channel_mask; //var: PSEC channels active for self trigger
 	vector<unsigned int> SELF_psec_chip_mask; //var: PSEC chips actove for self trigger
-	map<int, map<int, vector<double>>> map_data; //entire data map | index: board < channel < samplevector
-	map<int, map<string, unsigned short>> map_meta; //entire meta map | index: board < metakey < value
-	map<int, vector<unsigned short>> vbuffer;
+	map<int, vector<unsigned short>> map_raw;
 	map<int, vector<unsigned short>> map_acdcIF;
 	vector<unsigned short> map_accIF;
-
+	bool usbcheck;
+	
 	static void got_signal(int);
 };
 

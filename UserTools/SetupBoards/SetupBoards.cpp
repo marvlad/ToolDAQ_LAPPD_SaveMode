@@ -12,21 +12,25 @@ bool SetupBoards::Initialise(std::string configfile, DataModel &data){
 	
 	std::cout << "----------------------------------------------------------------------" << std::endl;
 	std::cout << "                                 Hello                                " << std::endl;
-	std::cout << "                         This is version v2.05                        " << std::endl;
+	std::cout << "                         This is version v2.11                        " << std::endl;
 	std::cout << " The latest changes were:                                             " << std::endl;
-	std::cout << " - Added the new PPS functionality                                    " << std::endl;
-	std::cout << " - Added a filter for \'ff\'                                          " << std::endl;
-	std::cout << " - Added a switch to save data                                        " << std::endl;
-	std::cout << " - Added counter for failed \'ff\' buffers                            " << std::endl;
-	std::cout << " - Added a switch for the new commands with 0xFF9                     " << std::endl;
+	std::cout << " - Added a Save switch in the config file for None/Raw/Ascii/Store    " << std::endl;
 	std::cout << "----------------------------------------------------------------------" << std::endl;
 
 	m_data= &data;
 	m_log= m_data->Log;
 
 	if(!m_variables.Get("verbose",m_verbose)) m_verbose=1;
+
 	m_data->conf.receiveFlag=0;
 	m_data->acc= new ACC();
+
+	// Make the ANNIEEvent Store if it doesn't exist
+	int recoeventexists = m_data->Stores.count("LAPPDStore");
+	if(recoeventexists==0)
+	{
+		m_data->Stores["LAPPDStore"] = new BoostStore(false,2);
+	}
 
 	return true;
 }
@@ -34,6 +38,8 @@ bool SetupBoards::Initialise(std::string configfile, DataModel &data){
 
 bool SetupBoards::Execute(){
 	int SMA;
+	int resetACC;
+	int resetACDC;
 	
 	if(m_data->conf.receiveFlag==0)	
 	{
@@ -83,10 +89,23 @@ bool SetupBoards::Execute(){
 		m_variables.Get("PPS_Ratio",tempPPSRatio);
 		m_data->conf.PPSRatio = std::stoul(tempPPSRatio,nullptr,16);	
 		m_variables.Get("PPS_Mux",m_data->conf.PPSBeamMultiplexer);
+
+		m_variables.Get("resetACC",resetACC);
+		m_variables.Get("resetACDC",resetACDC);
 	}
 
 	if(m_data->conf.receiveFlag==0 || m_data->conf.receiveFlag==1)
 	{
+
+		if(resetACC==1)
+		{
+			m_data->acc->resetACC();
+		}
+		if(resetACDC==1)
+		{
+			m_data->acc->resetACDC();
+		}
+
 		//trigger settings
 		////polarity
 		m_data->acc->setSign(m_data->conf.ACC_Sign, 2);

@@ -87,8 +87,8 @@ bool PsecData::Print(){
 	printf("Version number: 0x%04x\n", VersionNumber);
 	printf("Board number: %i\n", BoardIndex);
 	printf("Failed read attempts: %i\n", FailedReadCounter);
-	printf("Waveform size: %i\n", RawWaveform.size());
-	printf("Infoframe size: %i\n", AccInfoFrame.size());
+	printf("Waveform size: %li\n", RawWaveform.size());
+	printf("Infoframe size: %li\n", AccInfoFrame.size());
 	std::cout << "----------------------------------------------------------" << std::endl;
 	
 	return true;

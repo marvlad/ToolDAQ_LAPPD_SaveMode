@@ -22,11 +22,29 @@ class PsecData{
 
   map<int, vector<unsigned short>> ReceiveData;
   map<int,int> FFCounter;
+  int Savemode;
+  int counter=0;
+  string time;
 
   int BoardIndex;
   unsigned int VersionNumber = 0x0001;
-  vector<unsigned short> AccInfoFrame;
+
   vector<unsigned short> RawWaveform;
+
+  //Save 0
+  ////Save Receive Data + rest
+
+  //Save 1
+  map<int,map<int, vector<unsigned short>>> Parse1;
+  map<int,vector<unsigned short>> Meta1;
+
+  //Save 2
+  map<int, vector<unsigned short>> Parse2;
+  vector<unsigned short> Meta2;
+
+  //Save for all
+  vector<unsigned short> AccInfoFrame;
+  vector<unsigned short> PPS;
   int FailedReadCounter=0;
 
   int readRetval;

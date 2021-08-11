@@ -18,6 +18,7 @@
 #include <Metadata.h>
 #include <PsecData.h>
 #include <Config.h>
+#include <Waveform.h>
 
 /**
 * \class DataModel
