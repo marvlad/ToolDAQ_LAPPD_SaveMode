@@ -213,7 +213,7 @@ int ParseData::getParsedMeta(std::vector<unsigned short> buffer, int classindex)
 	}
 
 	meta.push_back(CombinedTriggerRateCount);
-
+	meta.push_back(0xeeee);
 	return 0;
 }
 
