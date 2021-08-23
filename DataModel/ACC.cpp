@@ -305,6 +305,18 @@ int ACC::initializeForDataReadout(int trigMode, unsigned int boardMask, int cali
 			break;
 		selfsetup:
  			command = 0x00B10000;
+			cout << "Chip: ";
+			for(int k: SELF_psec_chip_mask)
+			{
+				cout << k << " - ";
+			}
+			cout << endl;
+			cout << "C-Mask: ";
+			for(unsigned int k: SELF_psec_channel_mask)
+			{
+				printf("0x%02x\t",k);
+			}
+			cout << endl;
 			if(SELF_psec_chip_mask.size()!=SELF_psec_channel_mask.size())
 			{
 				writeErrorLog("PSEC mask error");	
