@@ -58,7 +58,7 @@ public:
 	void setNumChCoin(unsigned int in){SELF_number_channel_coincidence = in;} 
 	void setEnableCoin(int in){SELF_coincidence_onoff = in;} 
 	void setThreshold(unsigned int in){SELF_threshold = in;} 
-	void setPsecChipMask(vector<unsigned int> in){SELF_psec_channel_mask = in;} 
+	void setPsecChipMask(vector<int> in){SELF_psec_channel_mask = in;} 
 	void setPsecChannelMask(vector<unsigned int> in){SELF_psec_chip_mask = in;} 
 	void setValidationStart(unsigned int in){validation_start=in;}
 	void setValidationWindow(unsigned int in){validation_window=in;} 
@@ -145,7 +145,7 @@ private:
 	vector<unsigned short> lastAccBuffer; //most recently received ACC buffer
 	vector<int> alignedAcdcIndices; //number relative to ACC index (RJ45 port) corresponds to the connected ACDC boards
 	vector<unsigned int> SELF_psec_channel_mask; //var: PSEC channels active for self trigger
-	vector<unsigned int> SELF_psec_chip_mask; //var: PSEC chips actove for self trigger
+	vector<int> SELF_psec_chip_mask; //var: PSEC chips actove for self trigger
 	map<int, vector<unsigned short>> map_raw;
 	map<int, vector<unsigned short>> map_acdcIF;
 	vector<unsigned short> map_accIF;
