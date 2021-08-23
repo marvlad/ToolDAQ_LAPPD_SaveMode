@@ -311,20 +311,20 @@ int ACC::initializeForDataReadout(int trigMode, unsigned int boardMask, int cali
 			}
 			for(int i=0; i<(int)SELF_psec_chip_mask.size(); i++)
 			{	
-				command = (command | (boardMask << 24)) | (SELF_psec_chip_mask[i] << 12) | SELF_psec_channel_mask[i]; printf("Mask: 0x%08x",command);
+				command = (command | (boardMask << 24)) | (SELF_psec_chip_mask[i] << 12) | SELF_psec_channel_mask[i]; printf("Mask: 0x%08x\n",command);
 				usbcheck=usb->sendData(command); if(usbcheck==false){writeErrorLog("Send Error");}	
 			}
 			command = 0x00B16000;
-			command = (command | (boardMask << 24)) | SELF_sign; printf("Sign: 0x%08x",command);
+			command = (command | (boardMask << 24)) | SELF_sign; printf("Sign: 0x%08x\n",command);
 			usbcheck=usb->sendData(command);	if(usbcheck==false){writeErrorLog("Send Error");}	
 			command = 0x00B18000;
-			command = (command | (boardMask << 24)) | SELF_coincidence_onoff; printf("coin onoff: 0x%08x",command);
+			command = (command | (boardMask << 24)) | SELF_coincidence_onoff; printf("coin onoff: 0x%08x\n",command);
 			usbcheck=usb->sendData(command); if(usbcheck==false){writeErrorLog("Send Error");}
 			command = 0x00B15000;
-			command = (command | (boardMask << 24)) | SELF_number_channel_coincidence; printf("Coin num: 0x%08x",command);
+			command = (command | (boardMask << 24)) | SELF_number_channel_coincidence; printf("Coin num: 0x%08x\n",command);
 			usbcheck=usb->sendData(command); if(usbcheck==false){writeErrorLog("Send Error");}
 			command = 0x00A60000;
-			command = (command | (boardMask << 24)) | (0x1F << 12) | SELF_threshold; printf("threshold: 0x%08x",command);
+			command = (command | (boardMask << 24)) | (0x1F << 12) | SELF_threshold; printf("threshold: 0x%08x\n",command);
 			usbcheck=usb->sendData(command); if(usbcheck==false){writeErrorLog("Send Error");}	
 	}
 	command = 0x00340000;
