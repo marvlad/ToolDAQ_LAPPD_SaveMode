@@ -58,8 +58,8 @@ public:
 	void setNumChCoin(unsigned int in){SELF_number_channel_coincidence = in;} 
 	void setEnableCoin(int in){SELF_coincidence_onoff = in;} 
 	void setThreshold(unsigned int in){SELF_threshold = in;} 
-	void setPsecChipMask(vector<int> in){SELF_psec_channel_mask = in;} 
-	void setPsecChannelMask(vector<unsigned int> in){SELF_psec_chip_mask = in;} 
+	void setPsecChipMask(vector<int> in){SELF_psec_chip_mask = in;} 
+	void setPsecChannelMask(vector<unsigned int> in){SELF_psec_channel_mask = in;} 
 	void setValidationStart(unsigned int in){validation_start=in;}
 	void setValidationWindow(unsigned int in){validation_window=in;} 
 	void setTriggermode(int in){trigMode = in;} 	
