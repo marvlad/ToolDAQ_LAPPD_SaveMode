@@ -42,12 +42,12 @@ ACDC_mask 0xFF #Choose which boards to set, 8 bit, each representing an ACDC boa
 PSEC_Chip_Mask_0 1 #on(1) or off(0)
 PSEC_Chip_Mask_1 0 #on(1) or off(0)
 PSEC_Chip_Mask_2 0 #on(1) or off(0)
-PSEC_Chip_Mask_3 1 #on(1) or off(0)
+PSEC_Chip_Mask_3 0 #on(1) or off(0)
 PSEC_Chip_Mask_4 0 #on(1) or off(0)
 PSEC_Channel_Mask_0 0x20 #6 bit, each for a channel, from 0x00 to 0x3F
 PSEC_Channel_Mask_1 0x00 #6 bit, each for a channel, from 0x00 to 0x3F
 PSEC_Channel_Mask_2 0x00 #6 bit, each for a channel, from 0x00 to 0x3F
-PSEC_Channel_Mask_3 0x3F #6 bit, each for a channel, from 0x00 to 0x3F
+PSEC_Channel_Mask_3 0x00 #6 bit, each for a channel, from 0x00 to 0x3F
 PSEC_Channel_Mask_4 0x00 #6 bit, each for a channel, from 0x00 to 0x3F
 
 #Validation time
