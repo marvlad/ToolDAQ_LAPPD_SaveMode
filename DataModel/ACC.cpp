@@ -305,27 +305,28 @@ int ACC::initializeForDataReadout(int trigMode, unsigned int boardMask, int cali
 			break;
 		selfsetup:
  			command = 0x00B10000;
+			
 			cout << "Chip: ";
-			for(int k: SELF_psec_chip_mask)
-			{
-				cout << k << " - ";
-			}
+			for(int k: SELF_psec_chip_mask){cout << k << " - ";}
 			cout << endl;
-			cout << "C-Mask: ";
-			for(unsigned int k: SELF_psec_channel_mask)
-			{
-				printf("0x%02x\t",k);
-			}
-			cout << endl;
+			printf("%s","Channel-Mask: ");
+			for(unsigned int k: SELF_psec_channel_mask){printf("0x%02x\t",k);}
+			printf("\n");
+			
 			if(SELF_psec_chip_mask.size()!=SELF_psec_channel_mask.size())
 			{
 				writeErrorLog("PSEC mask error");	
 			}
+			
 			for(int i=0; i<(int)SELF_psec_chip_mask.size(); i++)
 			{	
-				command = (command | (boardMask << 24)) | i << 12) | SELF_psec_channel_mask[i]; printf("Mask: 0x%08x\n",command);
-				usbcheck=usb->sendData(command); if(usbcheck==false){writeErrorLog("Send Error");}	
+				if(SELF_psec_chip_mask[i]==1)
+				{		
+					command = (command | (boardMask << 24)) | i << 12 | SELF_psec_channel_mask[i]; printf("Mask: 0x%08x\n",command);
+					usbcheck=usb->sendData(command); if(usbcheck==false){writeErrorLog("Send Error");}	
+				}
 			}
+			
 			command = 0x00B16000;
 			command = (command | (boardMask << 24)) | SELF_sign; printf("Sign: 0x%08x\n",command);
 			usbcheck=usb->sendData(command);	if(usbcheck==false){writeErrorLog("Send Error");}	
