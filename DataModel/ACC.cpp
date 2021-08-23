@@ -694,7 +694,7 @@ int ACC::listenForAcdcData(int trigMode)
 bool ACC::setPedestals(unsigned int boardmask, unsigned int chipmask, unsigned int adc)
 {
 	unsigned int command = 0x00A20000;
-	command = (command | (boardmask << 24)) | (chipmask << 12) | adc;
+	command = (command | (boardmask << 24)) | (chipmask << 12) | adc; printf("Pedestal: 0x%08x\n",command);
 	usbcheck=usb->sendData(command); if(usbcheck==false){writeErrorLog("Send Error");}
 	return true;
 }
