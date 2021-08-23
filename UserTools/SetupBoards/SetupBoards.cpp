@@ -133,16 +133,16 @@ bool SetupBoards::Execute(){
 		std::vector<unsigned int> tempVecPsecChannelMask = {m_data->conf.PSEC_Channel_Mask_0,m_data->conf.PSEC_Channel_Mask_1,m_data->conf.PSEC_Channel_Mask_2,m_data->conf.PSEC_Channel_Mask_3,m_data->conf.PSEC_Channel_Mask_4};
 		std::vector<unsigned int> psecChipMask;
 	    	std::vector<unsigned int> psecChannelMask;
-		for(int i=0; i<5; i++)
+		/*for(int i=0; i<5; i++)
 		{
 			if(tempPsecChipMask[i]==1)
 			{
 				psecChipMask.push_back(tempPsecChipMask[i]);
 				psecChannelMask.push_back(tempVecPsecChannelMask[i]);
 			}
-		}
-		m_data->acc->setPsecChipMask(psecChipMask);
-		m_data->acc->setPsecChannelMask(psecChannelMask);
+		}*/
+		m_data->acc->setPsecChipMask(tempPsecChipMask);
+		m_data->acc->setPsecChannelMask(tempVecPsecChannelMask);
 
 		//validation window
 		unsigned int validationStart;
