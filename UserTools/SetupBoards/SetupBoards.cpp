@@ -148,13 +148,13 @@ bool SetupBoards::Execute(){
 		//validation window
 		unsigned int validationStart;
 		stringstream ss31;
-		ss31 << std::hex << (int)m_data->conf.Validation_Start*40;
+		ss31 << std::hex << (int)m_data->conf.Validation_Start/25;
 		validationStart = std::stoul(ss31.str(),nullptr,16);
 		m_data->acc->setValidationStart(validationStart);		
 		
 		unsigned int validationWindow;
 		stringstream ss32;
-		ss32 << std::hex << (int)m_data->conf.Validation_Window*40;
+		ss32 << std::hex << (int)m_data->conf.Validation_Window/25;
 		validationWindow = std::stoul(ss32.str(),nullptr,16);
 		m_data->acc->setValidationWindow(validationWindow);
 
