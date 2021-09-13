@@ -241,15 +241,15 @@ int ACC::initializeForDataReadout(int trigMode, unsigned int boardMask, int cali
 
 			command = 0x00320000;
 			command = command | validation_start;
-			printf("Start CMD: 0x%08x", command);
+			printf("Start CMD: 0x%08x\n", command);
 			usbcheck=usb->sendData(command); if(usbcheck==false){writeErrorLog("Send Error");}	
 			command = 0x00330000;
 			command = command | validation_window;
-			printf("Length CMD: 0x%08x", command);
+			printf("Length CMD: 0x%08x\n", command);
 			usbcheck=usb->sendData(command); if(usbcheck==false){writeErrorLog("Send Error");}	
 			command = 0x00350000;
 			command = command | PPSBeamMultiplexer;
-			printf("MUX: 0x%08x", command);
+			printf("MUX: 0x%08x\n", command);
 			usbcheck=usb->sendData(command); if(usbcheck==false){writeErrorLog("Send Error");}
 			goto selfsetup;
 			break;
