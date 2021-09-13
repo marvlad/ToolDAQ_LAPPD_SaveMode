@@ -20,7 +20,7 @@ SMA 0
 
 #Trigger
 ##Triggermode
-Triggermode 4 #...
+Triggermode 5 #...
 
 ##ACC settings
 ACC_Sign 0 #normal(0) or inverted(1)
