@@ -51,8 +51,8 @@ PSEC_Channel_Mask_3 0x00 #6 bit, each for a channel, from 0x00 to 0x3F
 PSEC_Channel_Mask_4 0x00 #6 bit, each for a channel, from 0x00 to 0x3F
 
 #Validation time
-Validation_Start 5 #value from 0 to 819 in us
-Validation_Window 500 #value from 0 to 819 in us
+Validation_Start 100 #value from 0 to 819 in ns
+Validation_Window 200000 #value from 0 to 819 in ns
 
 #Calibration mode
 Calibration_Mode 0 #on(1) or off(0)
