@@ -321,9 +321,11 @@ int ACC::initializeForDataReadout(int trigMode, unsigned int boardMask, int cali
 				writeErrorLog("PSEC mask error");	
 			}
 			
+			std::vector<unsigned int> CHIPMASK = {0x00000000,0x00001000,0x00002000,0x00003000,0x00004000};
 			for(int i=0; i<(int)SELF_psec_chip_mask.size(); i++)
-			{			
-				command = (command | (boardMask << 24)) | i << 12 | SELF_psec_channel_mask[i]; printf("Mask: 0x%08x\n",command);
+			{		
+				command = 0x00B10000;
+				command = (command | (boardMask << 24)) | CHIPMASK[i] | SELF_psec_channel_mask[i]; printf("Mask: 0x%08x\n",command);
 				usbcheck=usb->sendData(command); if(usbcheck==false){writeErrorLog("Send Error");}	
 			}
 			
