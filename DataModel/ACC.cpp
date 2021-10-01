@@ -322,12 +322,9 @@ int ACC::initializeForDataReadout(int trigMode, unsigned int boardMask, int cali
 			}
 			
 			for(int i=0; i<(int)SELF_psec_chip_mask.size(); i++)
-			{	
-				if(SELF_psec_chip_mask[i]==1)
-				{		
-					command = (command | (boardMask << 24)) | i << 12 | SELF_psec_channel_mask[i]; printf("Mask: 0x%08x\n",command);
-					usbcheck=usb->sendData(command); if(usbcheck==false){writeErrorLog("Send Error");}	
-				}
+			{			
+				command = (command | (boardMask << 24)) | i << 12 | SELF_psec_channel_mask[i]; printf("Mask: 0x%08x\n",command);
+				usbcheck=usb->sendData(command); if(usbcheck==false){writeErrorLog("Send Error");}	
 			}
 			
 			command = 0x00B16000;
