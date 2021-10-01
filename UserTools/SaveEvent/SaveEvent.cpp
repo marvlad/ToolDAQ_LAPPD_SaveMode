@@ -32,18 +32,24 @@ bool SaveEvent::Execute(){
 		//nothing
 	}else if(m_data->psec.Savemode==3)
 	{
+		if(m_data->psec.counter>10000)
+		{
+			m_data->psec.counter=0;
+			m_data->psec.time = getTime();
+		}
 		SaveRaw();
+		m_data->psec.counter +=1;
+		
 	}else if(m_data->psec.Savemode==1)
 	{
 		if(m_data->psec.counter>1000)
 		{
 			m_data->psec.counter=0;
 			m_data->psec.time = getTime();
-		}else
-		{
-			SaveASCII(m_data->psec.time);
-			m_data->psec.counter +=1;
-		}	
+		}
+		SaveASCII(m_data->psec.time);
+		m_data->psec.counter +=1;
+			
 	}else if(m_data->psec.Savemode==2)
 	{
 		//Prepare temporary vectors
@@ -113,12 +119,12 @@ bool SaveEvent::Finalise(){
 }
 
 
-void SaveEvent::SaveRaw()
+void SaveEvent::SaveRaw(string time)
 {
 	//Direct raw save of data
 	for(std::map<int, vector<unsigned short>>::iterator it=m_data->psec.ReceiveData.begin(); it!=m_data->psec.ReceiveData.end(); ++it)
 	{
-		string rawfn = "./Results/Raw_b" + to_string(it->first) + ".txt";
+		string rawfn = "./Results/Raw_b" + to_string(it->first) + "_" + time + ".txt";
 		ofstream d(rawfn.c_str(), ios::app); 
 		for(unsigned short k: it->second)
 		{
