@@ -12,7 +12,7 @@ bool SetupBoards::Initialise(std::string configfile, DataModel &data){
 	
 	std::cout << "----------------------------------------------------------------------" << std::endl;
 	std::cout << "                                 Hello                                " << std::endl;
-	std::cout << "                         This is version v2.16                        " << std::endl;
+	std::cout << "                         This is version v2.17                        " << std::endl;
 	std::cout << " The latest changes were:                                             " << std::endl;
 	std::cout << " - Added a Save switch in the config file for None/Raw/Ascii/Store    " << std::endl;
 	std::cout << " - Fixed some metadata issues                                         " << std::endl;
