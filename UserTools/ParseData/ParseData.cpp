@@ -5,17 +5,17 @@ ParseData::ParseData():Tool(){}
 
 bool ParseData::Initialise(std::string configfile, DataModel &data){
 
-  if(configfile!="")  m_variables.Initialise(configfile);
-  //m_variables.Print();
+	if(configfile!="")  m_variables.Initialise(configfile);
+	//m_variables.Print();
 
-  m_data= &data;
-  m_log= m_data->Log;
+	m_data= &data;
+	m_log= m_data->Log;
 
-  if(!m_variables.Get("verbose",m_verbose)) m_verbose=1;
+	if(!m_variables.Get("verbose",m_verbose)) m_verbose=1;
 
-  first=boost::posix_time::microsec_clock::local_time();
-	
-  return true;
+	first=boost::posix_time::microsec_clock::local_time();
+
+	return true;
 }
 
 
@@ -24,14 +24,14 @@ bool ParseData::Execute(){
 	m_variables.Get("Save",m_data->psec.Savemode);
 
 	if(m_data->psec.Savemode != 0)
-  {
-  	if(m_data->psec.Savemode==2)
+	{
+		if(m_data->psec.Savemode==2)
 		{
-		  int boardindex, retval;
-		  std::vector<unsigned short> temp_Waveform;
+			int boardindex, retval;
+			std::vector<unsigned short> temp_Waveform;
 
-		  for(std::map<int, vector<unsigned short>>::iterator it=m_data->psec.ReceiveData.begin(); it!=m_data->psec.ReceiveData.end(); ++it)
-		  {
+			for(std::map<int, vector<unsigned short>>::iterator it=m_data->psec.ReceiveData.begin(); it!=m_data->psec.ReceiveData.end(); ++it)
+			{
 				//fill ParsedStream with vectors from data
 				retval = getParsedData(it->second);
 				if(retval == -3)
@@ -50,15 +50,15 @@ bool ParseData::Execute(){
 				{
 					std::cout << "Parsing went wrong! " << retval << std::endl;
 				}
-		  }
-		  channel_count = 0;
+			}
+			channel_count = 0;
 		}else if(m_data->psec.Savemode==1)
 		{
-		  int boardindex, retval;
-		  std::vector<unsigned short> temp_Waveform;
+			int boardindex, retval;
+			std::vector<unsigned short> temp_Waveform;
 
-		  for(std::map<int, vector<unsigned short>>::iterator it=m_data->psec.ReceiveData.begin(); it!=m_data->psec.ReceiveData.end(); ++it)
-		  {
+			for(std::map<int, vector<unsigned short>>::iterator it=m_data->psec.ReceiveData.begin(); it!=m_data->psec.ReceiveData.end(); ++it)
+			{
 				//fill ParsedStream with vectors from data
 				retval = getParsedData(it->second);
 				if(retval == -3)
@@ -79,11 +79,9 @@ bool ParseData::Execute(){
 					std::cout << "Parsing went wrong! " << retval << std::endl;
 				}
 				channel_count = 0;
-		  }
+			}
 		}
-  }
-	
-	
+	}
   return true;
 }
 
@@ -128,40 +126,40 @@ int ParseData::getParsedMeta(std::vector<unsigned short> buffer, int classindex)
 	vector<unsigned short>::iterator bit;
 	for(bit = buffer.begin(); bit != buffer.end(); ++bit)
 	{
-        if(*bit == startword)
-        {
-        	DistanceFromZero= std::distance(buffer.begin(), bit);
-        	start_indices.push_back(DistanceFromZero);
-        }
+		if(*bit == startword)
+		{
+			DistanceFromZero= std::distance(buffer.begin(), bit);
+			start_indices.push_back(DistanceFromZero);
+		}
 	}
 
 	//Filter in cases where one of the start words is found in the metadata 
-	    if(start_indices.size()>NUM_PSEC)
-	    {
+    	if(start_indices.size()>NUM_PSEC)
+    	{
 		for(int k=0; k<(int)start_indices.size()-1; k++)
 		{
-		    if(start_indices[k+1]-start_indices[k]>6*256+14)
-		    {
-			//nothing
-		    }else
-		    {
-			start_indices.erase(start_indices.begin()+(k+1));
-			k--;
-		    }
+	    		if(start_indices[k+1]-start_indices[k]>6*256+14)
+		   	{
+				//nothing
+			}else
+		   	{
+				start_indices.erase(start_indices.begin()+(k+1));
+				k--;
+	    		}
 		}
-	    }
+    	}
 	
 	//Last case emergency stop if metadata is still not quite right
 	if(start_indices.size() != NUM_PSEC)
 	{
-        string fnnn = "meta-corrupt-psec-buffer.txt";
-        cout << "Printing to file : " << fnnn << endl;
-        ofstream cb(fnnn);
-        for(unsigned short k: buffer)
-        {
-            cb << hex << k << endl;
-        }
-        return -2;
+		string fnnn = "meta-corrupt-psec-buffer.txt";
+		cout << "Printing to file : " << fnnn << endl;
+		ofstream cb(fnnn);
+		for(unsigned short k: buffer)
+		{
+	    		cb << hex << k << endl;
+		}
+		return -2;
 	}
 
 	//Fill the psec info map
@@ -184,12 +182,12 @@ int ParseData::getParsedMeta(std::vector<unsigned short> buffer, int classindex)
 	//Fill the psec trigger info map
 	for(int chip=0; chip<NUM_PSEC; chip++)
 	{
-	    for(int ch=0; ch<NUM_CH/NUM_PSEC; ch++)
-	    {
-	    	//Find the trigger data at begin + last_metadata_start + 13_info_words + 1_end_word + 1 
-	        bit = buffer.begin() + start_indices[4] + 13 + 1 + 1 + ch + (chip*(NUM_CH/NUM_PSEC));
-	        PsecTriggerInfo[chip].push_back(*bit);
-	    }
+		for(int ch=0; ch<NUM_CH/NUM_PSEC; ch++)
+		{
+			//Find the trigger data at begin + last_metadata_start + 13_info_words + 1_end_word + 1 
+			bit = buffer.begin() + start_indices[4] + 13 + 1 + 1 + ch + (chip*(NUM_CH/NUM_PSEC));
+			PsecTriggerInfo[chip].push_back(*bit);
+		}
 	}
 
 	//Fill the combined trigger
