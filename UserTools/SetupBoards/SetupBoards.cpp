@@ -17,7 +17,7 @@ bool SetupBoards::Initialise(std::string configfile, DataModel &data){
 	std::cout << " - Changed the beamgate start/length values to ns in config file      " << std::endl;
 	std::cout << " - Fixed the selftrigger-channel mask not being changed if turned off " << std::endl;
 	std::cout << " - Changed the timeout to 600s with a 10s print interval              " << std::endl;
-	std::cout << " - ... " << std::endl;
+	std::cout << " - (Re)Added the save-data-skip after a failed data-read attempt      " << std::endl;
 	std::cout << "----------------------------------------------------------------------" << std::endl;
 
 	m_data= &data;
