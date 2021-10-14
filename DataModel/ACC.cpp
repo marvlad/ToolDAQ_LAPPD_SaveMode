@@ -548,9 +548,9 @@ int ACC::listenForAcdcData(int trigMode)
 	//duration variables
 	auto start = chrono::steady_clock::now(); //start of the current event listening. 
 	auto now = chrono::steady_clock::now(); //just for initialization 
-	auto printDuration = chrono::seconds(2); //prints as it loops and listens
+	auto printDuration = chrono::seconds(10); //prints as it loops and listens
 	auto lastPrint = chrono::steady_clock::now();
-	auto timeoutDuration = chrono::seconds(20); // will exit and reinitialize
+	auto timeoutDuration = chrono::seconds(600); // will exit and reinitialize
 
 	while(true)
 	{ 
