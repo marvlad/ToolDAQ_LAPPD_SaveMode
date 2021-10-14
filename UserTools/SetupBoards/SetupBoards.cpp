@@ -12,13 +12,12 @@ bool SetupBoards::Initialise(std::string configfile, DataModel &data){
 	
 	std::cout << "----------------------------------------------------------------------" << std::endl;
 	std::cout << "                                 Hello                                " << std::endl;
-	std::cout << "                         This is version v2.18                        " << std::endl;
+	std::cout << "                         This is version v2.20                        " << std::endl;
 	std::cout << " The latest changes were:                                             " << std::endl;
-	std::cout << " - Added a Save switch in the config file for None/Raw/Ascii/Store    " << std::endl;
-	std::cout << " - Fixed some metadata issues                                         " << std::endl;
-	std::cout << " - Fixed the self trigger issue                                       " << std::endl;
 	std::cout << " - Changed the beamgate start/length values to ns in config file      " << std::endl;
 	std::cout << " - Fixed the selftrigger-channel mask not being changed if turned off " << std::endl;
+	std::cout << " - Changed the timeout to 600s with a 10s print interval              " << std::endl;
+	std::cout << " - ... " << std::endl;
 	std::cout << "----------------------------------------------------------------------" << std::endl;
 
 	m_data= &data;
