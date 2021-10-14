@@ -23,7 +23,7 @@ bool ParseData::Execute(){
 
 	m_variables.Get("Save",m_data->psec.Savemode);
 
-	if(m_data->psec.Savemode != 0)
+	if(m_data->psec.Savemode != 0 && m_data->psec.readRetval==0)
 	{
 		if(m_data->psec.Savemode==2)
 		{
