@@ -27,10 +27,10 @@ bool SaveEvent::Initialise(std::string configfile, DataModel &data){
 
 
 bool SaveEvent::Execute(){
-	if(m_data->psec.Savemode==0)
+	if(m_data->psec.Savemode==0 && m_data->psec.readRetval==0)
 	{
 		//nothing
-	}else if(m_data->psec.Savemode==3)
+	}else if(m_data->psec.Savemode==3 && m_data->psec.readRetval==0)
 	{
 		if(m_data->psec.counter>10000)
 		{
@@ -40,7 +40,7 @@ bool SaveEvent::Execute(){
 		SaveRaw();
 		m_data->psec.counter +=1;
 		
-	}else if(m_data->psec.Savemode==1)
+	}else if(m_data->psec.Savemode==1 && m_data->psec.readRetval==0)
 	{
 		if(m_data->psec.counter>1000)
 		{
@@ -50,7 +50,7 @@ bool SaveEvent::Execute(){
 		SaveASCII(m_data->psec.time);
 		m_data->psec.counter +=1;
 			
-	}else if(m_data->psec.Savemode==2)
+	}else if(m_data->psec.Savemode==2 && m_data->psec.readRetval==0)
 	{
 		//Prepare temporary vectors
 		std::map<unsigned long, vector<Waveform<double>>> LAPPDWaveforms;
