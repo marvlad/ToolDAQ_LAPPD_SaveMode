@@ -37,7 +37,7 @@ bool SaveEvent::Execute(){
 			m_data->psec.counter=0;
 			m_data->psec.time = getTime();
 		}
-		SaveRaw();
+		SaveRaw(m_data->psec.time);
 		m_data->psec.counter +=1;
 		
 	}else if(m_data->psec.Savemode==1 && m_data->psec.readRetval==0)
