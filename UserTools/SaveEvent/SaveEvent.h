@@ -38,7 +38,7 @@ class SaveEvent: public Tool {
     string MetaLabel;
     string PPSLabel;
 
-    void SaveRaw();
+    void SaveRaw(string time);
     void SaveASCII(string time);
 
     string getTime()
