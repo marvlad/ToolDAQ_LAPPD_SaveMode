@@ -821,7 +821,7 @@ void ACC::versionCheck()
 /*ID 13: Fires the software trigger*/
 void ACC::softwareTrigger()
 {
-	unsigned int command = 0xFFB70000;
+	unsigned int command = 0x00100000;
 	usbcheck=usb->sendData(command); if(usbcheck==false){writeErrorLog("Send Error");}
 }
 
