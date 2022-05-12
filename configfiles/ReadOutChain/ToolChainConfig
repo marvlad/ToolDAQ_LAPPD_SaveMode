@@ -24,7 +24,7 @@ service_kick_sec -1
 Tools_File configfiles/ReadOutChain/ToolsConfig
 
 ##### Run Type #####
-Inline 1000
+Inline -1 #Keep as -1 since Events are regulated in the config file now
 Interactive 0
 Remote 0
 
