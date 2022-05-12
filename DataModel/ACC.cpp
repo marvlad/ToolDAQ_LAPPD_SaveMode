@@ -548,9 +548,9 @@ int ACC::listenForAcdcData(int trigMode)
 	//duration variables
 	auto start = chrono::steady_clock::now(); //start of the current event listening. 
 	auto now = chrono::steady_clock::now(); //just for initialization 
-	auto printDuration = chrono::seconds(10); //prints as it loops and listens
+	auto printDuration = chrono::milliseconds(10000); //prints as it loops and listens
 	auto lastPrint = chrono::steady_clock::now();
-	auto timeoutDuration = chrono::seconds(600); // will exit and reinitialize
+	auto timeoutDuration =  chrono::milliseconds(timeoutvalue);// will exit and reinitialize
 
 	while(true)
 	{ 
@@ -559,11 +559,11 @@ int ACC::listenForAcdcData(int trigMode)
 		readoutSize.clear();
 		//Time the listen fuction
 		now = chrono::steady_clock::now();
-		if(chrono::duration_cast<chrono::seconds>(now - start) > timeoutDuration)
+		if(chrono::duration_cast<chrono::milliseconds>(now - start) > timeoutDuration)
 		{
 			string err_msg = "Have been waiting for a trigger for ";
-			err_msg += to_string(chrono::duration_cast<chrono::seconds>(now - start).count());
-			err_msg += " seconds";
+			err_msg += to_string(chrono::duration_cast<chrono::milliseconds>(now - start).count());
+			err_msg += " milliseconds";
 			writeErrorLog(err_msg);
 			return 404;
 		}
@@ -664,7 +664,9 @@ int ACC::listenForAcdcData(int trigMode)
 		//Handles buffers =/= 7795 words
 		if((int)acdc_buffer.size() != readoutSize[bi])
 		{
-			string err_msg = "Couldn't read 7795 words as expected! Tryingto fix it! Size was: ";
+			string err_msg = "Couldn't read ";
+            err_msg += to_string(readoutSize[bi]);
+            err_msg += "words as expected! Tryingto fix it! Size was: ";
 			err_msg += to_string(acdc_buffer.size());
 			writeErrorLog(err_msg);
 			return (bi+1);
@@ -672,6 +674,7 @@ int ACC::listenForAcdcData(int trigMode)
 		if(acdc_buffer[0] != 0x1234)
 		{
 			acdc_buffer.clear();
+            return 406;
 		}
 
 		//save this buffer a private member of ACDC
@@ -681,10 +684,13 @@ int ACC::listenForAcdcData(int trigMode)
 		{
 			if(a->getBoardIndex() == bi)
 			{
-				map_raw[bi] = acdc_buffer;
+				vector_raw.insert(vector_raw.end(), acdc_buffer.begin(), acdc_buffer.end());
 			}
 		}
 	}
+
+    vector_bi = boardsReadyForRead;
+    boardsReadyForRead.clear();
 
 	return 0;
 }

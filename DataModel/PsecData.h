@@ -17,35 +17,28 @@ class PsecData{
 
   PsecData();
 
-  bool Send(zmq::socket_t* sock);
-  bool Receive(zmq::socket_t* sock);
+  vector<unsigned short> ReceiveData;
+  vector<unsigned short> AccInfoFrame;
+  vector<int> BoardIndex;
+  vector<unsigned short> RawWaveform;
+  map<int, vector<unsigned short>> TransferMap;
 
-  map<int, vector<unsigned short>> ReceiveData;
-  map<int,int> FFCounter;
-  int Savemode;
-  int counter=0;
+  //map<int,int> FFCounter;
+  int counter;
+  int DataSaved;
   string time;
 
-  int BoardIndex;
-  unsigned int VersionNumber = 0x0001;
-
-  vector<unsigned short> RawWaveform;
+  unsigned int VersionNumber;
 
   //Save 0
   ////Save Receive Data + rest
 
   //Save 1
-  map<int,map<int, vector<unsigned short>>> Parse1;
-  map<int,vector<unsigned short>> Meta1;
-
-  //Save 2
-  map<int, vector<unsigned short>> Parse2;
-  vector<unsigned short> Meta2;
+  map<int,map<int, vector<unsigned short>>> ParseData;
+  map<int,vector<unsigned short>> ParseMeta;
 
   //Save for all
-  vector<unsigned short> AccInfoFrame;
-  vector<unsigned short> PPS;
-  int FailedReadCounter=0;
+  int FailedReadCounter;
 
   int readRetval;
 

@@ -34,14 +34,15 @@ public:
 	/*ID Nan: Returns set triggermode */
 	int getTriggermode(){return trigMode;} 
 	/*ID Nan: Returns the raw data map*/
-	map<int, vector<unsigned short>> returnRaw(){return map_raw;}
+	vector<unsigned short> returnRaw(){return vector_raw;}
+    vector<int> returnBoardIndices(){return vector_bi;}
 	/*ID Nan: Returns the acdc info frame map*/
-	map<int, vector<unsigned short>> returnACDCIF(){return map_acdcIF;} 
 	/*ID Nan: Returns the acc info frame map*/
 	vector<unsigned short> returnACCIF(){return map_accIF;} 
 	/*ID Nan: Returns the ACC info frame*/
 	vector<unsigned short> getACCInfoFrame();
 	/*ID Nan: Error management*/
+    void clearData(){vector_raw.clear(); vector_bi.clear();}
 	void clearErrors(){errorcode.clear();}
 	vector<unsigned int> returnErrors()
 	{
@@ -71,6 +72,7 @@ public:
 	}
 	void setPPSRatio(unsigned int in){PPSRatio = in;} 
 	void setPPSBeamMultiplexer(int in){PPSBeamMultiplexer = in;} 
+    void setTimeoutInMs(int in){timeoutvalue = in;}  
 
 	
 	/*------------------------------------------------------------------------------------*/
@@ -146,10 +148,12 @@ private:
 	vector<int> alignedAcdcIndices; //number relative to ACC index (RJ45 port) corresponds to the connected ACDC boards
 	vector<unsigned int> SELF_psec_channel_mask; //var: PSEC channels active for self trigger
 	vector<int> SELF_psec_chip_mask; //var: PSEC chips actove for self trigger
-	map<int, vector<unsigned short>> map_raw;
+	vector<unsigned short> vector_raw;
+	vector<int> vector_bi;
 	map<int, vector<unsigned short>> map_acdcIF;
 	vector<unsigned short> map_accIF;
 	bool usbcheck;
+    int timeoutvalue;
 	
 	static void got_signal(int);
 };

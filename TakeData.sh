@@ -2,5 +2,5 @@
  
 source ./Setup.sh
 
-./main
+./main configfiles/ReadOutChain/ToolChainConfig
 

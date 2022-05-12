@@ -33,10 +33,9 @@ class SaveEvent: public Tool {
  private:
 
     string path;
-    string WaveformLabel;
-    string AccLabel;
-    string MetaLabel;
-    string PPSLabel;
+    string StoreLabel;
+
+    int EvtsPerFile;
 
     void SaveRaw(string time);
     void SaveASCII(string time);
@@ -49,8 +48,6 @@ class SaveEvent: public Tool {
         ss << std::put_time(std::localtime(&in_time_t), "%Y%d%m_%H%M%S");
         return ss.str();
     }
-
-
 
 };
 

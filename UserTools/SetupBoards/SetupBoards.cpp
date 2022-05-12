@@ -12,13 +12,10 @@ bool SetupBoards::Initialise(std::string configfile, DataModel &data){
 	
 	std::cout << "----------------------------------------------------------------------" << std::endl;
 	std::cout << "                                 Hello                                " << std::endl;
-	std::cout << "                         This is version v2.22                        " << std::endl;
+	std::cout << "                         This is version v2.30                        " << std::endl;
 	std::cout << " The latest changes were:                                             " << std::endl;
-	std::cout << " - Changed the beamgate start/length values to ns in config file      " << std::endl;
-	std::cout << " - Fixed the selftrigger-channel mask not being changed if turned off " << std::endl;
-	std::cout << " - Changed the timeout to 600s with a 10s print interval              " << std::endl;
-	std::cout << " - (Re)Added the save-data-skip after a failed data-read attempt      " << std::endl;
-	std::cout << " - Changed the Software trigger command to 0xFFB70000                 " << std::endl;
+    std::cout << " - Large Update fixing all sorts of things                            " << std::endl;
+    std::cout << " - Added a new Savemode that alllows for dual saving                  " << std::endl;
 	std::cout << "----------------------------------------------------------------------" << std::endl;
 
 	m_data= &data;
@@ -29,86 +26,39 @@ bool SetupBoards::Initialise(std::string configfile, DataModel &data){
 	m_data->conf.receiveFlag=0;
 	m_data->acc= new ACC();
 
-	// Make the ANNIEEvent Store if it doesn't exist
-	int recoeventexists = m_data->Stores.count("LAPPDStore");
-	if(recoeventexists==0)
-	{
-		m_data->Stores["LAPPDStore"] = new BoostStore(false,2);
-	}
+    bool ret = LoadSettings();
+    m_variables.Get("Save",m_data->conf.Savemode);
+
+    if(m_data->conf.Savemode==2 || m_data->conf.Savemode==4)
+    {
+        // Make the ANNIEEvent Store if it doesn't exist
+        int recoeventexists = m_data->Stores.count("LAPPDStore");
+        if(recoeventexists==0)
+        {
+            m_data->Stores["LAPPDStore"] = new BoostStore(false,2);
+        }
+    }
 
 	return true;
 }
 
 
 bool SetupBoards::Execute(){
-	int SMA;
-	int resetACC;
-	int resetACDC;
 	
-	if(m_data->conf.receiveFlag==0)	
+	if(m_data->conf.receiveFlag==1)
 	{
-		m_variables.Get("Triggermode",m_data->conf.triggermode);	
-
-		m_variables.Get("SMA",SMA);
-		m_variables.Get("ACC_Sign",m_data->conf.ACC_Sign);
-		m_variables.Get("ACDC_Sign",m_data->conf.ACDC_Sign);
-		m_variables.Get("SELF_Sign",m_data->conf.SELF_Sign);
-
-		m_variables.Get("SELF_Enable_Coincidence",m_data->conf.SELF_Enable_Coincidence);
-		m_variables.Get("SELF_Coincidence_Number",m_data->conf.SELF_Coincidence_Number);
-		m_variables.Get("SELF_threshold",m_data->conf.SELF_threshold);
-
-		m_variables.Get("PSEC_Chip_Mask_0",m_data->conf.PSEC_Chip_Mask_0);
-		m_variables.Get("PSEC_Chip_Mask_1",m_data->conf.PSEC_Chip_Mask_1);
-		m_variables.Get("PSEC_Chip_Mask_2",m_data->conf.PSEC_Chip_Mask_2);
-		m_variables.Get("PSEC_Chip_Mask_3",m_data->conf.PSEC_Chip_Mask_3);
-		m_variables.Get("PSEC_Chip_Mask_4",m_data->conf.PSEC_Chip_Mask_4);
-
-		string tempPsecChannelMask;
-		m_variables.Get("PSEC_Channel_Mask_0",tempPsecChannelMask);
-		m_data->conf.PSEC_Channel_Mask_0 = std::stoul(tempPsecChannelMask,nullptr,16);
-		m_variables.Get("PSEC_Channel_Mask_1",tempPsecChannelMask);
-		m_data->conf.PSEC_Channel_Mask_1 = std::stoul(tempPsecChannelMask,nullptr,16);
-		m_variables.Get("PSEC_Channel_Mask_2",tempPsecChannelMask);
-		m_data->conf.PSEC_Channel_Mask_2 = std::stoul(tempPsecChannelMask,nullptr,16);
-		m_variables.Get("PSEC_Channel_Mask_3",tempPsecChannelMask);
-		m_data->conf.PSEC_Channel_Mask_3 = std::stoul(tempPsecChannelMask,nullptr,16);
-		m_variables.Get("PSEC_Channel_Mask_4",tempPsecChannelMask);
-		m_data->conf.PSEC_Channel_Mask_4 = std::stoul(tempPsecChannelMask,nullptr,16);	
-
-		m_variables.Get("Validation_Start",m_data->conf.Validation_Start);
-		m_variables.Get("Validation_Window",m_data->conf.Validation_Window);
-
-		m_variables.Get("Pedestal_channel",m_data->conf.Pedestal_channel);
-		m_variables.Get("Pedestal_channel_mask",tempPsecChannelMask);
-		m_data->conf.Pedestal_channel_mask = std::stoul(tempPsecChannelMask,nullptr,16);
-
-		m_variables.Get("ACDC_mask",tempPsecChannelMask);
-		m_data->conf.ACDC_mask = std::stoul(tempPsecChannelMask,nullptr,16);		
-
-		m_variables.Get("Calibration_Mode",m_data->conf.Calibration_Mode);
-		m_variables.Get("Raw_Mode",m_data->conf.Raw_Mode);
-		
-		string tempPPSRatio;
-		m_variables.Get("PPS_Ratio",tempPPSRatio);
-		m_data->conf.PPSRatio = std::stoul(tempPPSRatio,nullptr,16);	
-		m_variables.Get("PPS_Mux",m_data->conf.PPSBeamMultiplexer);
-
-		m_variables.Get("resetACC",resetACC);
-		m_variables.Get("resetACDC",resetACDC);
-	}
-
-	if(m_data->conf.receiveFlag==0 || m_data->conf.receiveFlag==1)
-	{
-
-		if(resetACC==1)
+		if(m_data->conf.ResetSwitchACC==1)
 		{
 			m_data->acc->resetACC();
 		}
-		if(resetACDC==1)
+		if(m_data->conf.ResetSwitchACDC==1)
 		{
 			m_data->acc->resetACDC();
 		}
+
+        int timeout;
+        m_variables.Get("Timeout",timeout);
+        m_data->acc->setTimeoutInMs(timeout);
 
 		//trigger settings
 		////polarity
@@ -132,20 +82,10 @@ bool SetupBoards::Execute(){
 		m_data->acc->setThreshold(threshold);
 
 		//psec masks combine
-		std::vector<int> tempPsecChipMask = {m_data->conf.PSEC_Chip_Mask_0,m_data->conf.PSEC_Chip_Mask_1,m_data->conf.PSEC_Chip_Mask_2,m_data->conf.PSEC_Chip_Mask_3,m_data->conf.PSEC_Chip_Mask_4};
-		std::vector<unsigned int> tempVecPsecChannelMask = {m_data->conf.PSEC_Channel_Mask_0,m_data->conf.PSEC_Channel_Mask_1,m_data->conf.PSEC_Channel_Mask_2,m_data->conf.PSEC_Channel_Mask_3,m_data->conf.PSEC_Channel_Mask_4};
-		std::vector<unsigned int> psecChipMask;
-	    	std::vector<unsigned int> psecChannelMask;
-		/*for(int i=0; i<5; i++)
-		{
-			if(tempPsecChipMask[i]==1)
-			{
-				psecChipMask.push_back(tempPsecChipMask[i]);
-				psecChannelMask.push_back(tempVecPsecChannelMask[i]);
-			}
-		}*/
-		m_data->acc->setPsecChipMask(tempPsecChipMask);
-		m_data->acc->setPsecChannelMask(tempVecPsecChannelMask);
+		std::vector<int> PsecChipMask = {m_data->conf.PSEC_Chip_Mask_0,m_data->conf.PSEC_Chip_Mask_1,m_data->conf.PSEC_Chip_Mask_2,m_data->conf.PSEC_Chip_Mask_3,m_data->conf.PSEC_Chip_Mask_4};
+		std::vector<unsigned int> VecPsecChannelMask = {m_data->conf.PSEC_Channel_Mask_0,m_data->conf.PSEC_Channel_Mask_1,m_data->conf.PSEC_Channel_Mask_2,m_data->conf.PSEC_Channel_Mask_3,m_data->conf.PSEC_Channel_Mask_4};
+		m_data->acc->setPsecChipMask(PsecChipMask);
+		m_data->acc->setPsecChannelMask(VecPsecChannelMask);
 
 		//validation window
 		unsigned int validationStart;
@@ -179,10 +119,10 @@ bool SetupBoards::Execute(){
 		
 		m_data->acc->setPPSBeamMultiplexer(m_data->conf.PPSBeamMultiplexer);
 		
-		if(SMA==0)
+		if(m_data->conf.SMA==0)
 		{
 			m_data->acc->setSMA_OFF();
-		}else if(SMA==1)
+		}else if(m_data->conf.SMA==1)
 		{
 			m_data->acc->setSMA_ON();
 		}
@@ -202,17 +142,81 @@ bool SetupBoards::Execute(){
 
 		m_data->acc->emptyUsbLine();
 		m_data->acc->dumpData(0xFF);
-	}
+	}else
+    {
+        std::cout << "Setup failed miserably!" << std:.endl;
+        return false;
+    }
 
 	if(m_data->psec.readRetval!=0)
 	{
 		m_data->acc->dumpData(0xFF);
 		m_data->acc->emptyUsbLine();
 	}
+
 	return true;
 }
 
 
-bool SetupBoards::Finalise(){
+bool SetupBoards::Finalise()
+{
 	return true;
+}
+
+
+bool SetupBoards::LoadDefaults()
+{
+    m_variables.Get("Triggermode",m_data->conf.triggermode);	
+
+    m_variables.Get("SMA",m_data->conf.SMA);
+    m_variables.Get("ACC_Sign",m_data->conf.ACC_Sign);
+    m_variables.Get("ACDC_Sign",m_data->conf.ACDC_Sign);
+    m_variables.Get("SELF_Sign",m_data->conf.SELF_Sign);
+
+    m_variables.Get("SELF_Enable_Coincidence",m_data->conf.SELF_Enable_Coincidence);
+    m_variables.Get("SELF_Coincidence_Number",m_data->conf.SELF_Coincidence_Number);
+    m_variables.Get("SELF_threshold",m_data->conf.SELF_threshold);
+
+    m_variables.Get("PSEC_Chip_Mask_0",m_data->conf.PSEC_Chip_Mask_0);
+    m_variables.Get("PSEC_Chip_Mask_1",m_data->conf.PSEC_Chip_Mask_1);
+    m_variables.Get("PSEC_Chip_Mask_2",m_data->conf.PSEC_Chip_Mask_2);
+    m_variables.Get("PSEC_Chip_Mask_3",m_data->conf.PSEC_Chip_Mask_3);
+    m_variables.Get("PSEC_Chip_Mask_4",m_data->conf.PSEC_Chip_Mask_4);
+
+    string tempPsecChannelMask;
+    m_variables.Get("PSEC_Channel_Mask_0",tempPsecChannelMask);
+    m_data->conf.PSEC_Channel_Mask_0 = std::stoul(tempPsecChannelMask,nullptr,16);
+    m_variables.Get("PSEC_Channel_Mask_1",tempPsecChannelMask);
+    m_data->conf.PSEC_Channel_Mask_1 = std::stoul(tempPsecChannelMask,nullptr,16);
+    m_variables.Get("PSEC_Channel_Mask_2",tempPsecChannelMask);
+    m_data->conf.PSEC_Channel_Mask_2 = std::stoul(tempPsecChannelMask,nullptr,16);
+    m_variables.Get("PSEC_Channel_Mask_3",tempPsecChannelMask);
+    m_data->conf.PSEC_Channel_Mask_3 = std::stoul(tempPsecChannelMask,nullptr,16);
+    m_variables.Get("PSEC_Channel_Mask_4",tempPsecChannelMask);
+    m_data->conf.PSEC_Channel_Mask_4 = std::stoul(tempPsecChannelMask,nullptr,16);	
+
+    m_variables.Get("Validation_Start",m_data->conf.Validation_Start);
+    m_variables.Get("Validation_Window",m_data->conf.Validation_Window);
+
+    m_variables.Get("Pedestal_channel",m_data->conf.Pedestal_channel);
+    m_variables.Get("Pedestal_channel_mask",tempPsecChannelMask);
+    m_data->conf.Pedestal_channel_mask = std::stoul(tempPsecChannelMask,nullptr,16);
+
+    m_variables.Get("ACDC_mask",tempPsecChannelMask);
+    m_data->conf.ACDC_mask = std::stoul(tempPsecChannelMask,nullptr,16);		
+
+    m_variables.Get("Calibration_Mode",m_data->conf.Calibration_Mode);
+    m_variables.Get("Raw_Mode",m_data->conf.Raw_Mode);
+    
+    string tempPPSRatio;
+    m_variables.Get("PPS_Ratio",tempPPSRatio);
+    m_data->conf.PPSRatio = std::stoul(tempPPSRatio,nullptr,16);	
+    m_variables.Get("PPS_Mux",m_data->conf.PPSBeamMultiplexer);
+
+    m_variables.Get("resetACC",m_data->conf.ResetSwitchACC);
+    m_variables.Get("resetACDC",m_data->conf.ResetSwitchACDC);
+
+    m_data->conf.receiveFlag=1;
+
+    return true;
 }

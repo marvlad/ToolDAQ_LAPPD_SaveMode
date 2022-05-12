@@ -12,59 +12,61 @@ class Config : public SerialisableObject{
 
  public:
 
-  Config();
-  
-  //Comms
-  bool Send(zmq::socket_t* sock);
-  bool Receive(zmq::socket_t* sock);
-  int receiveFlag = 0;
+    Config();
 
-  //trigger
-  int triggermode;
+    int receiveFlag;
+    int Savemode;
 
-  //triggersettings
-  int ACC_Sign;
-  int ACDC_Sign;
-  int SELF_Sign;
-  int SELF_Enable_Coincidence;
-  int SELF_Coincidence_Number;
-  int SELF_threshold;
+    //trigger
+    int triggermode;
 
-  //ACDC boards
-  unsigned int ACDC_mask;
+    int ResetSwitchACC;
+    int ResetSwitchACDC;
+    int SMA;
 
-  //PSEC chips for self trigger
-  int PSEC_Chip_Mask_0;
-  int PSEC_Chip_Mask_1;
-  int PSEC_Chip_Mask_2;
-  int PSEC_Chip_Mask_3;
-  int PSEC_Chip_Mask_4;
-  unsigned int PSEC_Channel_Mask_0;
-  unsigned int PSEC_Channel_Mask_1;
-  unsigned int PSEC_Channel_Mask_2;
-  unsigned int PSEC_Channel_Mask_3;
-  unsigned int PSEC_Channel_Mask_4;
+    //triggersettings
+    int ACC_Sign;
+    int ACDC_Sign;
+    int SELF_Sign;
+    int SELF_Enable_Coincidence;
+    int SELF_Coincidence_Number;
+    int SELF_threshold;
 
-  //Validation time
-  float Validation_Start;
-  float Validation_Window;
+    //ACDC boards
+    unsigned int ACDC_mask;
 
-  //Calibration mode
-  int Calibration_Mode;
+    //PSEC chips for self trigger
+    int PSEC_Chip_Mask_0;
+    int PSEC_Chip_Mask_1;
+    int PSEC_Chip_Mask_2;
+    int PSEC_Chip_Mask_3;
+    int PSEC_Chip_Mask_4;
+    unsigned int PSEC_Channel_Mask_0;
+    unsigned int PSEC_Channel_Mask_1;
+    unsigned int PSEC_Channel_Mask_2;
+    unsigned int PSEC_Channel_Mask_3;
+    unsigned int PSEC_Channel_Mask_4;
 
-  //Raw mode
-  bool Raw_Mode;
+    //Validation time
+    float Validation_Start;
+    float Validation_Window;
 
-  //Pedestal set value channel
-  int Pedestal_channel;
-  unsigned int Pedestal_channel_mask;
- 
- //PPS
- unsigned int PPSRatio;
- int PPSBeamMultiplexer;
- 
-  bool SetDefaults();
-  bool Print();
+    //Calibration mode
+    int Calibration_Mode;
+
+    //Raw mode
+    bool Raw_Mode;
+
+    //Pedestal set value channel
+    int Pedestal_channel;
+    unsigned int Pedestal_channel_mask;
+
+    //PPS
+    unsigned int PPSRatio;
+    int PPSBeamMultiplexer;
+
+    bool SetDefaults();
+    bool Print();
 
  private:
  
@@ -72,6 +74,10 @@ class Config : public SerialisableObject{
 
   ar & receiveFlag;
   ar & triggermode;
+  ar & ResetSwitchACC;
+  ar & ResetSwitchACDC;
+  ar & Savemode;
+  ar & SMA;
   ar & ACC_Sign;
   ar & ACDC_Sign;
   ar & SELF_Sign;
@@ -95,6 +101,7 @@ class Config : public SerialisableObject{
   ar & PSEC_Channel_Mask_4;
 
   //Validation time
+  ar & Validation_Start;
   ar & Validation_Window;
 
   //Calibration mode

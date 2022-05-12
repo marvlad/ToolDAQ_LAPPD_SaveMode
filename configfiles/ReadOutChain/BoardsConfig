@@ -3,17 +3,20 @@
 #1 = Save to ASCII
 #2 = Save to Bianrydata -> Store
 #3 = Save to Raw
+#4 = Dual, saves ASCII and BinaryStore
 Save 1
+EventsPerFile 10000 #Only relevant for non binary
+MaxEvents 10000
 
 path ./Results/LAPPD
-WaveformLabel LAPPDData
-AccLabel AccInfoFrame
-MetaLabel Metadata
-PPSLabel PPSFrames
+StoreLabel LAPPDData
+
+#Timeoutvalue
+Timeout 500 #ms
 
 #Reset
-resetACC 0
-resetACDC 0
+resetACC 1
+resetACDC 1
 
 #SMA set
 SMA 0
@@ -32,7 +35,7 @@ ACDC_Sign 0 #normal(0) or inverted(1)
 SELF_Sign 1 #normal(0) or inverted(1)
 SELF_Enable_Coincidence 0 #on(1) or off(0)
 SELF_Coincidence_Number 0 #number from 0 to 30
-SELF_threshold 2000 #adc counts from 0 to 4095
+SELF_threshold 1600 #adc counts from 0 to 4095
 
 #Masks
 ##ACDC boards
@@ -51,13 +54,13 @@ PSEC_Channel_Mask_3 0x00 #6 bit, each for a channel, from 0x00 to 0x3F
 PSEC_Channel_Mask_4 0x00 #6 bit, each for a channel, from 0x00 to 0x3F
 
 #Validation time
-Validation_Start 100 #value from 0 to 819 in ns
-Validation_Window 200000 #value from 0 to 819 in ns
+Validation_Start 325250 #value from 0 to 819 in ns
+Validation_Window 20000 #value from 0 to 819 in ns
 
 #Calibration mode
 Calibration_Mode 0 #on(1) or off(0)
 
-#Raw mode
+#Raw mode !!!!DOES NOTHING!!!!
 Raw_Mode 1 #returns a map with <int, vector<unsigned short>> | the int is the board index and the vector the data
 
 #Pedestal set value channel

@@ -5,34 +5,49 @@ SaveEvent::SaveEvent():Tool(){}
 
 bool SaveEvent::Initialise(std::string configfile, DataModel &data){
 
-  if(configfile!="")  m_variables.Initialise(configfile);
-  //m_variables.Print();
+    if(configfile!="")  m_variables.Initialise(configfile);
+    //m_variables.Print();
 
-  m_data= &data;
-  m_log= m_data->Log;
+    m_data= &data;
+    m_log= m_data->Log;
 
-  if(!m_variables.Get("verbose",m_verbose)) m_verbose=1;
+    if(!m_variables.Get("verbose",m_verbose)) m_verbose=1;
 
-  m_variables.Get("path",path);
-  path+= getTime();
-  m_variables.Get("WaveformLabel",WaveformLabel);
-  m_variables.Get("AccLabel",AccLabel);
-  m_variables.Get("MetaLabel",MetaLabel);
-  m_variables.Get("PPSLabel",PPSLabel);
+    m_variables.Get("path",path);
+    path+= getTime();
+    m_variables.Get("StoreLabel",WaveformLabel);
+    m_variables.Get("EventsPerFile",EvtsPerFile);
+    
+    m_data->psec.time = getTime();
 
-  m_data->psec.time = getTime();
-
-  return true;
+    return true;
 }
 
 
 bool SaveEvent::Execute(){
-	if(m_data->psec.Savemode==0 && m_data->psec.readRetval==0)
+    if(m_data->psec.readRetval!=0){return true;}
+
+	if(m_data->conf.Savemode==0)
 	{
 		//nothing
-	}else if(m_data->psec.Savemode==3 && m_data->psec.readRetval==0)
+	}else if(m_data->conf.Savemode==1)
 	{
-		if(m_data->psec.counter>10000)
+		if(m_data->psec.counter>EvtsPerFile)
+		{
+			m_data->psec.counter=0;
+			m_data->psec.time = getTime();
+		}
+		SaveASCII(m_data->psec.time);
+		m_data->psec.counter +=1;	
+	}else if(m_data->conf.Savemode==2)
+	{
+        m_data->psec.RawWaveform = m_data->psec.ReceiveData;
+		m_data->Stores["LAPPDStore"]->Set(StoreLabel,m_data->psec);
+		m_data->Stores["LAPPDStore"]->Save(path.c_str());
+		m_data->Stores["LAPPDStore"]->Delete(); 
+	}else if(m_data->conf.Savemode==3)
+	{
+		if(m_data->psec.counter>EvtsPerFile)
 		{
 			m_data->psec.counter=0;
 			m_data->psec.time = getTime();
@@ -40,80 +55,65 @@ bool SaveEvent::Execute(){
 		SaveRaw(m_data->psec.time);
 		m_data->psec.counter +=1;
 		
-	}else if(m_data->psec.Savemode==1 && m_data->psec.readRetval==0)
+	}else if(m_data->conf.Savemode==4)
 	{
-		if(m_data->psec.counter>1000)
+		if(m_data->psec.counter>EvtsPerFile)
 		{
 			m_data->psec.counter=0;
 			m_data->psec.time = getTime();
 		}
 		SaveASCII(m_data->psec.time);
 		m_data->psec.counter +=1;
-			
-	}else if(m_data->psec.Savemode==2 && m_data->psec.readRetval==0)
-	{
-		//Prepare temporary vectors
-		std::map<unsigned long, vector<Waveform<double>>> LAPPDWaveforms;
-		Waveform<double> tmpWave;
-		vector<Waveform<double>> VecTmpWave;
 
-		if(m_data->psec.PPS.size() == 0)
-		{	
-			//Loop over data stream
-			for(std::map<int, vector<unsigned short>>::iterator it=m_data->psec.Parse2.begin(); it!=m_data->psec.Parse2.end(); ++it)
-			{
-				for(unsigned short k: it->second)
-				{
-					tmpWave.PushSample((double)k);
-				}
-				VecTmpWave.push_back(tmpWave);
-				LAPPDWaveforms.insert(LAPPDWaveforms.end(),std::pair<unsigned long, vector<Waveform<double>>>((unsigned long)it->first,VecTmpWave));
-				tmpWave.ClearSamples();
-				VecTmpWave.clear();
-			}	
-		}
-
-		m_data->Stores["LAPPDStore"]->Set(WaveformLabel,LAPPDWaveforms);
-		m_data->Stores["LAPPDStore"]->Set(AccLabel,m_data->psec.AccInfoFrame);
-		m_data->Stores["LAPPDStore"]->Set(MetaLabel,m_data->psec.Meta2);
-		m_data->Stores["LAPPDStore"]->Set(PPSLabel,m_data->psec.PPS);
-		m_data->Stores["LAPPDStore"]->Save(path.c_str()); //std::cout << "SAVED" << std::endl;	
+        m_data->psec.RawWaveform = m_data->psec.ReceiveData;
+		m_data->Stores["LAPPDStore"]->Set(StoreLabel,m_data->psec);
+		m_data->Stores["LAPPDStore"]->Save(path.c_str());
 		m_data->Stores["LAPPDStore"]->Delete(); 
-		LAPPDWaveforms.clear();
 	}else
 	{
 		std::cout << "Nothing received!" << std::endl;	
 	}
 	
 	//Cleanup	
-	m_data->psec.Parse1.clear();
-	m_data->psec.Parse2.clear();
-	m_data->psec.Meta1.clear();
-	m_data->psec.Meta2.clear();
+	m_data->psec.ParseData.clear();
+	m_data->psec.ParseMeta.clear();
 	m_data->psec.AccInfoFrame.clear();
-	m_data->psec.PPS.clear();
+	m_data->psec.BoardIndex.clear();
 	m_data->psec.ReceiveData.clear();
+    m_data->psec.RawWaveform.clear();
+    m_data->psec.TransferMap.clear();
+
+    m_data->psec.DataSaved++;
+    int MaxEvents;
+    m_variables.Get("MaxEvents",MaxEvents);
+    if(m_data->psec.DataSaved==MaxEvents)
+    {
+        m_data->vars.Set("StopLoop",1);
+    }
+
 	return true;
 }
 
 
-bool SaveEvent::Finalise(){
-	if(m_data->psec.Savemode==2)
+bool SaveEvent::Finalise()
+{
+	if(m_data->psec.Savemode==2 || m_data->psec.Savemode==4)
 	{
 		m_data->Stores["LAPPDStore"]->Close();
 		delete m_data->Stores["LAPPDStore"];
 		m_data->Stores["LAPPDStore"] = 0;
-		usleep(1000000);
-		std::string datapath = path;
-		BoostStore *indata=new BoostStore(false,2); //this leaks but its jsut for testing
-		indata->Initialise(datapath);
-		std::cout <<"Print indata:"<<std::endl;
-		indata->Print(false);
-		long entries;
-		indata->Header->Get("TotalEntries",entries);
-		std::cout <<"entries: "<<entries<<std::endl;
+		//usleep(1000000);
+        /*
+            std::string datapath = path;
+            BoostStore *indata=new BoostStore(false,2); //this leaks but its jsut for testing
+            indata->Initialise(datapath);
+            std::cout <<"Print indata:"<<std::endl;
+            indata->Print(false);
+            long entries;
+            indata->Header->Get("TotalEntries",entries);
+            std::cout <<"entries: "<<entries<<std::endl;
+        */
 	}
-
 
 	return true;
 }
@@ -122,7 +122,7 @@ bool SaveEvent::Finalise(){
 void SaveEvent::SaveRaw(string time)
 {
 	//Direct raw save of data
-	for(std::map<int, vector<unsigned short>>::iterator it=m_data->psec.ReceiveData.begin(); it!=m_data->psec.ReceiveData.end(); ++it)
+	for(std::map<int, vector<unsigned short>>::iterator it=m_data->psec.TransferMap.begin(); it!=m_data->psec.TransferMap.end(); ++it)
 	{
 		string rawfn = "./Results/Raw_b" + to_string(it->first) + "_" + time + ".txt";
 		ofstream d(rawfn.c_str(), ios::app); 
@@ -140,14 +140,10 @@ void SaveEvent::SaveASCII(string time)
 	string rawfn = "./Results/Ascii" + time + ".txt";
 	ofstream d(rawfn.c_str(), ios::app); 
 
-	vector<int> boardsReadyForRead;
-	for(std::map<int,map<int, vector<unsigned short>>>::iterator it=m_data->psec.Parse1.begin(); it!=m_data->psec.Parse1.end(); ++it)
-	{
-		boardsReadyForRead.push_back(it->first);
-	} 
+	vector<int> boardsReadyForRead = m_data->psec.BoardIndex;
 
-	map<int,map<int, vector<unsigned short>>> map_data = m_data->psec.Parse1;
-	map<int, vector<unsigned short>> map_meta = m_data->psec.Meta1;
+	map<int,map<int, vector<unsigned short>>> map_data = m_data->psec.ParseData;
+	map<int, vector<unsigned short>> map_meta = m_data->psec.ParseMeta;
 
 	string delim = " ";
 	for(int enm=0; enm<NUM_SAMP; enm++)
@@ -179,4 +175,8 @@ void SaveEvent::SaveASCII(string time)
 		d << endl;
 	}
 	d.close();
+
+    boardsReadyForRead.clear();
+    map_data.clear();
+    map_meta.clear();
 }
