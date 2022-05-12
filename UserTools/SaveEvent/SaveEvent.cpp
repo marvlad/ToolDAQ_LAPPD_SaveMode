@@ -20,7 +20,7 @@ bool SaveEvent::Initialise(std::string configfile, DataModel &data){
     
     m_data->psec.time = getTime();
 
-    start = chrono::steady_clock::now();
+    starttime = getTime();
 
     return true;
 }
@@ -116,6 +116,11 @@ bool SaveEvent::Finalise()
             std::cout <<"entries: "<<entries<<std::endl;
         */
 	}
+
+    std::tm tm = {};
+    std::stringstream ss(starttime);
+    ss >> std::get_time(&tm, "%Y%d%m_%H%M%S");
+    auto start = std::chrono::system_clock::from_time_t(std::mktime(&tm));
 
     end = chrono::steady_clock::now();
     auto dt = chrono::duration_cast<chrono::milliseconds>(end - start).count();
