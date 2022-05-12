@@ -4,7 +4,7 @@ PsecData::PsecData()
 {
     VersionNumber = 0xA002;
     counter = 0;
-    DataSave = 0;
+    DataSaved = 0;
     FailedReadCounter=0;
 }
 
