@@ -124,7 +124,7 @@ bool SaveEvent::Finalise()
 
     auto end = chrono::system_clock::now();
     auto dt = chrono::duration_cast<chrono::milliseconds>(end - start).count();
-    cout << "Runtime was" << to_string(dt) << " ms"  << endl;
+    cout << "Runtime was " << to_string(dt) << " ms"  << endl;
 
 	return true;
 }
