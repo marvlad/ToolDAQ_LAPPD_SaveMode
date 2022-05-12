@@ -47,7 +47,7 @@ bool ParseData::Execute(){
         {
             for(int cj=i*type; cj<(i+1)*type; cj++)
             {
-                m_data->psec.TransferMap[m_data->psec.BoardIndex.at(i)].append(m_data->psec.ReceiveData.at(cj));
+                m_data->psec.TransferMap[m_data->psec.BoardIndex.at(i)].push_back(m_data->psec.ReceiveData.at(cj));
             }
         }
 
@@ -94,7 +94,7 @@ bool ParseData::Execute(){
         {
             for(int cj=i*type; cj<(i+1)*type; cj++)
             {
-                m_data->psec.TransferMap[m_data->psec.BoardIndex.at(i)].append(m_data->psec.ReceiveData.at(cj));
+                m_data->psec.TransferMap[m_data->psec.BoardIndex.at(i)].push_back(m_data->psec.ReceiveData.at(cj));
             }
         }
 
@@ -116,7 +116,7 @@ bool ParseData::Execute(){
         {
             for(int cj=i*type; cj<(i+1)*type; cj++)
             {
-                m_data->psec.TransferMap[m_data->psec.BoardIndex.at(i)].append(m_data->psec.ReceiveData.at(cj));
+                m_data->psec.TransferMap[m_data->psec.BoardIndex.at(i)].push_back(m_data->psec.ReceiveData.at(cj));
             }
         }
 

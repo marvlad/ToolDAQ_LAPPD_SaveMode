@@ -164,7 +164,7 @@ bool SetupBoards::Finalise()
 }
 
 
-bool SetupBoards::LoadDefaults()
+bool SetupBoards::LoadSettings()
 {
     m_variables.Get("Triggermode",m_data->conf.triggermode);	
 
