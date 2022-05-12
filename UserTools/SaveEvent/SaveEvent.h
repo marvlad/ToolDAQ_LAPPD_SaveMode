@@ -34,6 +34,8 @@ class SaveEvent: public Tool {
 
     string path;
     string StoreLabel;
+    auto start = chrono::steady_clock::now();
+    auto end = chrono::steady_clock::now();
 
     int EvtsPerFile;
 

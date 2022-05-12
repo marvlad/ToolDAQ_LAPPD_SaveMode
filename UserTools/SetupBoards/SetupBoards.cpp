@@ -16,6 +16,8 @@ bool SetupBoards::Initialise(std::string configfile, DataModel &data){
 	std::cout << " The latest changes were:                                             " << std::endl;
     std::cout << " - Large Update fixing all sorts of things                            " << std::endl;
     std::cout << " - Added a new Savemode that alllows for dual saving                  " << std::endl;
+    std::cout << " - New settings for timeout value and max events                      " << std::endl;
+    std::cout << " - Runtime print at the end                                           " << std::endl;
 	std::cout << "----------------------------------------------------------------------" << std::endl;
 
 	m_data= &data;
