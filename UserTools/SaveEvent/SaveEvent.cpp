@@ -15,7 +15,7 @@ bool SaveEvent::Initialise(std::string configfile, DataModel &data){
 
     m_variables.Get("path",path);
     path+= getTime();
-    m_variables.Get("StoreLabel",WaveformLabel);
+    m_variables.Get("StoreLabel",StoreLabel);
     m_variables.Get("EventsPerFile",EvtsPerFile);
     
     m_data->psec.time = getTime();
@@ -97,7 +97,7 @@ bool SaveEvent::Execute(){
 
 bool SaveEvent::Finalise()
 {
-	if(m_data->psec.Savemode==2 || m_data->psec.Savemode==4)
+	if(m_data->conf.Savemode==2 || m_data->conf.Savemode==4)
 	{
 		m_data->Stores["LAPPDStore"]->Close();
 		delete m_data->Stores["LAPPDStore"];

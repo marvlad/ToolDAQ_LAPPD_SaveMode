@@ -28,7 +28,7 @@ bool ParseData::Execute(){
     }
 
     //Savemode check
-    if(m_data->psec.Savemode==0)
+    if(m_data->conf.Savemode==0)
     {
         retfinish = true;
     }else if(m_data->conf.Savemode==1)
@@ -47,7 +47,7 @@ bool ParseData::Execute(){
         {
             for(int cj=i*type; cj<(i+1)*type; cj++)
             {
-                TransferMap[m_data->psec.BoardIndex.at(i)].append(m_data->psec.ReceiveData.at(cj));
+                m_data->psec.TransferMap[m_data->psec.BoardIndex.at(i)].append(m_data->psec.ReceiveData.at(cj));
             }
         }
 
@@ -57,7 +57,7 @@ bool ParseData::Execute(){
             retval = getParsedData(it->second);
             if(retval == -3)
             {
-                m_data->psec.Savemode = 3;
+                m_data->conf.Savemode = 3;
                 return true;
             }else if(retval == 0)
             {
@@ -94,7 +94,7 @@ bool ParseData::Execute(){
         {
             for(int cj=i*type; cj<(i+1)*type; cj++)
             {
-                TransferMap[m_data->psec.BoardIndex.at(i)].append(m_data->psec.ReceiveData.at(cj));
+                m_data->psec.TransferMap[m_data->psec.BoardIndex.at(i)].append(m_data->psec.ReceiveData.at(cj));
             }
         }
 
@@ -116,7 +116,7 @@ bool ParseData::Execute(){
         {
             for(int cj=i*type; cj<(i+1)*type; cj++)
             {
-                TransferMap[m_data->psec.BoardIndex.at(i)].append(m_data->psec.ReceiveData.at(cj));
+                m_data->psec.TransferMap[m_data->psec.BoardIndex.at(i)].append(m_data->psec.ReceiveData.at(cj));
             }
         }
 

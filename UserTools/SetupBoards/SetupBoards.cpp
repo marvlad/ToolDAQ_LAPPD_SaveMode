@@ -144,7 +144,7 @@ bool SetupBoards::Execute(){
 		m_data->acc->dumpData(0xFF);
 	}else
     {
-        std::cout << "Setup failed miserably!" << std:.endl;
+        std::cout << "Setup failed miserably!" << std::endl;
         return false;
     }
 
