@@ -122,7 +122,7 @@ bool SaveEvent::Finalise()
     ss >> std::get_time(&tm, "%Y%d%m_%H%M%S");
     auto start = std::chrono::system_clock::from_time_t(std::mktime(&tm));
 
-    auto end = chrono::steady_clock::now();
+    auto end = chrono::system_clock::now();
     auto dt = chrono::duration_cast<chrono::milliseconds>(end - start).count();
     cout << "Runtime was" << to_string(dt) << " ms"  << endl;
 
