@@ -62,6 +62,10 @@ bool SetupBoards::Execute(){
         m_variables.Get("Timeout",timeout);
         m_data->acc->setTimeoutInMs(timeout);
 
+        //Map boards to LAPPDs
+        m_data->acc->setLAPPD1(m_data->conf.LAPPDtoBoard1);
+        m_data->acc->setLAPPD2(m_data->conf.LAPPDtoBoard2);
+
 		//trigger settings
 		////polarity
 		m_data->acc->setSign(m_data->conf.ACC_Sign, 2);
@@ -169,6 +173,21 @@ bool SetupBoards::Finalise()
 bool SetupBoards::LoadSettings()
 {
     m_variables.Get("Triggermode",m_data->conf.triggermode);	
+
+    vector<int> vtmp;
+    int itmp;
+    m_variables.Get("LAPPD1_1",itemp);
+    vtmp.push_back(itemp);
+    m_variables.Get("LAPPD1_2",itemp);
+    vtmp.push_back(itemp);   
+    m_data->conf.LAPPDtoBoard1 = vtmp;
+    vtmp.clear();
+    m_variables.Get("LAPPD2_1",itemp);
+    vtmp.push_back(itemp);
+    m_variables.Get("LAPPD2_2",itemp);
+    vtmp.push_back(itemp);   
+    m_data->conf.LAPPDtoBoard2 = vtmp;
+    vtmp.clear();
 
     m_variables.Get("SMA",m_data->conf.SMA);
     m_variables.Get("ACC_Sign",m_data->conf.ACC_Sign);

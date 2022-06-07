@@ -4,9 +4,18 @@
 #2 = Save to Bianrydata -> Store
 #3 = Save to Raw
 #4 = Dual, saves ASCII and BinaryStore
-Save 1
+Save 2
 EventsPerFile 10000 #Only relevant for non binary
 MaxEvents 10000
+
+#LAPPD to boards mapping
+#This corresponds to the physical connection on the ACC
+## LAPPD 1
+LAPPD1_1 0
+LAPPD1_2 1
+## LAPPD 2
+LAPPD2_1 2 
+LAPPD2_2 3
 
 path ./Results/LAPPD
 StoreLabel LAPPDData
@@ -68,6 +77,6 @@ Pedestal_channel 2000 #pedestal value to be set
 Pedestal_channel_mask 0x1F #5 bit representin psec chips
 
 #PPS
-PPS_Ratio 0x0001
+PPS_Ratio 0x000a
 PPS_Mux 1
 

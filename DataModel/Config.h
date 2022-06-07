@@ -19,6 +19,8 @@ class Config : public SerialisableObject{
 
     //trigger
     int triggermode;
+    vector<int> LAPPDtoBoard1;
+    vector<int> LAPPDtoBoard2;
 
     int ResetSwitchACC;
     int ResetSwitchACDC;
@@ -74,6 +76,8 @@ class Config : public SerialisableObject{
 
   ar & receiveFlag;
   ar & triggermode;
+  ar & LAPPDtoBoard1;
+  ar & LAPPDtoBoard2;
   ar & ResetSwitchACC;
   ar & ResetSwitchACDC;
   ar & Savemode;
