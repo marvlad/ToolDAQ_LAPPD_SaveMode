@@ -174,18 +174,18 @@ bool SetupBoards::LoadSettings()
 {
     m_variables.Get("Triggermode",m_data->conf.triggermode);	
 
-    vector<int> vtmp;
+    std::vector<int> vtmp;
     int itmp;
-    m_variables.Get("LAPPD1_1",itemp);
-    vtmp.push_back(itemp);
-    m_variables.Get("LAPPD1_2",itemp);
-    vtmp.push_back(itemp);   
+    m_variables.Get("LAPPD1_1",itmp);
+    vtmp.push_back(itmp);
+    m_variables.Get("LAPPD1_2",itmp);
+    vtmp.push_back(itmp);   
     m_data->conf.LAPPDtoBoard1 = vtmp;
     vtmp.clear();
-    m_variables.Get("LAPPD2_1",itemp);
-    vtmp.push_back(itemp);
-    m_variables.Get("LAPPD2_2",itemp);
-    vtmp.push_back(itemp);   
+    m_variables.Get("LAPPD2_1",itmp);
+    vtmp.push_back(itmp);
+    m_variables.Get("LAPPD2_2",itmp);
+    vtmp.push_back(itmp);   
     m_data->conf.LAPPDtoBoard2 = vtmp;
     vtmp.clear();
 

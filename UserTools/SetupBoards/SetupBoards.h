@@ -7,6 +7,8 @@
 
 #include "Tool.h"
 
+using namespace std;
+
 
 /**
  * \class SetupBoards
