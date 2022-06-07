@@ -6,6 +6,8 @@
 #include <iostream>
 #include <vector>
 
+using namespace std;
+
 class Config : public SerialisableObject{
 
  friend class boost::serialization::access;
