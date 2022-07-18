@@ -1,13 +1,3 @@
-/////////////////////////////////////////////////////
-//  file: stdUSBl.cxx
-//
-//  A libusb implementation of ezusbsys--
-//  StdUSB libusb implementation used here uses same 
-//  function interface with native stdUSB Windows WDM 
-//  driver.
-// 
-//////////////////////////////////////////////////////
-
 #include <string>
 #include <stdio.h>
 #include "stdUSB.h"
@@ -64,6 +54,41 @@ stdUSB::~stdUSB() {
 			std::cout << "Could not close USB correctly" << std::endl;
 		}
 	}
+}
+
+
+void stdUSB::ReInitUSB();
+{
+	if (stdHandle != INVALID_HANDLE_VALUE)
+	{
+		//libusb_context *usb_context = NULL;
+		bool retval;
+
+		retval = freeHandle();
+		if(!retval)
+		{
+			retval = freeHandle();
+		}
+		if(retval)
+		{
+			libusb_exit(usb_context);
+		}else
+		{
+			std::cout << "Could not close USB correctly" << std::endl;
+		}
+	}
+    usleep(500000);
+
+    stdHandle = INVALID_HANDLE_VALUE; 
+    USBFX2_VENDOR_ID = 0x6672;
+    USBFX2_PRODUCT_ID = 0x2920;
+    bool retval;
+    retval = createHandles();
+    if(!retval)
+    {
+        cout << "Usb was unable to connect to USB line, exiting" << endl;
+        exit(EXIT_FAILURE);
+    }   
 }
 
 /*
@@ -208,7 +233,7 @@ bool stdUSB::sendData(unsigned int data) { // throw(...)
     retval = libusb_bulk_transfer(stdHandle, EP_WRITE, (unsigned char*)buff, sizeof(buff), &transferred, USB_TOUT_MS_WRITE);
 
     if (retval == 0 && transferred == 4){ //return value must be exact as the bytes transferred
-     	//printf("sending 0x%08x\n", data);  
+      	//printf("sending data to board...\n");  
       	return true;
     }
     else if(retval != 0 && transferred == 4){
@@ -255,15 +280,20 @@ int stdUSB::readData(unsigned char * pData, int* lread) { // throw(...)
     //this is a super fast line? But the usb firmware is clocked at
     //48Mbit per sec. 
     //l-packets*4bytes per packet*8bits per byte/48Mbits per sec = ~0.6ms - 6ms depending on which. 
-    int waitTime = buff_sz*8/48; //microseconds
-    // std::this_thread::sleep_for(std::chrono::microseconds(waitTime)); 
+    int waitTime = buff_sz*4*8/48; //microseconds
+    std::this_thread::sleep_for(std::chrono::microseconds(waitTime)); 
     int retval = libusb_bulk_transfer(stdHandle, EP_READ, pData, buff_sz, lread, USB_TOUT_MS_READ);
-    // std::this_thread::sleep_for(std::chrono::microseconds(waitTime));
+    std::this_thread::sleep_for(std::chrono::microseconds(waitTime));
 
     if (retval == 0) {
         return retval;
     }else{
-      	if(retval != -7){
+      	if(retval == -4)
+        {
+            cout << "Error with retval " << retval << " - Trying to fix myself by re-initilising the USB connection" << endl;
+            ReInitUSB();
+        }else if(retval != -7)
+        {
             cout << "Error with retval " << retval << endl;
         }
         return retval;
@@ -308,6 +338,11 @@ vector<unsigned short> stdUSB::safeReadData(int maxSamples) {
             //if the read times out, then end...
             if(retval == -7){
                 break;
+            }
+            if(retval!=-7 && retval!=0)
+            {
+                vector<unsigned short> empty;
+                return empty;                
             }
             charsRead += samples;
         }

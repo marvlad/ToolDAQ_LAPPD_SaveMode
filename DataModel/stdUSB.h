@@ -30,6 +30,8 @@ class stdUSB {
         bool isOpen(); //control function for open usb line
         bool reset(); //reset usb connection
 
+        void ReInitUSB();
+
     private:
         struct libusb_device* init(int device_count); //initilises the usb device for claiming handles
         struct libusb_device_handle *stdHandle; //usb handle struct
