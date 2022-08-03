@@ -3,6 +3,7 @@
 
 #include <libusb-1.0/libusb.h> //represents the new version of the usb lib
 #include <vector>
+#include <unistd.h>
 
 using namespace std;
 
