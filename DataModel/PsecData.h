@@ -15,34 +15,38 @@ class PsecData{
 
  public:
 
-  PsecData();
+    PsecData();
 
-  vector<unsigned short> ReceiveData;
-  vector<unsigned short> AccInfoFrame;
-  vector<int> BoardIndex;
-  vector<unsigned short> RawWaveform;
-  map<int, vector<unsigned short>> TransferMap;
+    vector<unsigned short> ReceiveData;
+    vector<unsigned short> AccInfoFrame;
+    vector<int> BoardIndex;
+    vector<unsigned short> RawWaveform;
+    map<int, vector<unsigned short>> TransferMap;
+    vector<unsigned int> errorcodes;
 
-  //map<int,int> FFCounter;
-  int counter;
-  int DataSaved;
-  string time;
+    vector<int> LAPPDtoBoard1;
+    vector<int> LAPPDtoBoard2;
 
-  unsigned int VersionNumber;
+    //map<int,int> FFCounter;
+    int counter;
+    int DataSaved;
+    string time;
 
-  //Save 0
-  ////Save Receive Data + rest
+    unsigned int VersionNumber;
 
-  //Save 1
-  map<int,map<int, vector<unsigned short>>> ParseData;
-  map<int,vector<unsigned short>> ParseMeta;
+    //Save 0
+    ////Save Receive Data + rest
 
-  //Save for all
-  int FailedReadCounter;
+    //Save 1
+    map<int,map<int, vector<unsigned short>>> ParseData;
+    map<int,vector<unsigned short>> ParseMeta;
 
-  int readRetval;
+    //Save for all
+    int FailedReadCounter;
 
-  bool Print();
+    int readRetval;
+
+    bool Print();
 
  private:
 

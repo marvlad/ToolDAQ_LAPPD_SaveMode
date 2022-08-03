@@ -4,10 +4,16 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <queue>
+#include <unistd.h>
+#include <fstream>
 
 #include "Tool.h"
 
 using namespace std;
+
+#define MAX_NUM_BOARDS 8
+#define PSECFRAME 7795
 
 
 /**
@@ -24,15 +30,22 @@ class SetupBoards: public Tool {
 
  public:
 
-  SetupBoards(); ///< Simple constructor
-  bool Initialise(std::string configfile,DataModel &data); ///< Initialise Function for setting up Tool resorces. @param configfile The path and name of the dynamic configuration file to read in. @param data A reference to the transient data class used to pass information between Tools.
-  bool Execute(); ///< Executre function used to perform Tool perpose. 
-  bool Finalise(); ///< Finalise funciton used to clean up resorces.
+    SetupBoards(); ///< Simple constructor
+    bool Initialise(std::string configfile,DataModel &data); ///< Initialise Function for setting up Tool resorces. @param configfile The path and name of the dynamic configuration file to read in. @param data A reference to the transient data class used to pass information between Tools.
+    bool Execute(); ///< Executre function used to perform Tool perpose. 
+    bool Finalise(); ///< Finalise funciton used to clean up resorces.
 
-  bool LoadSettings();
+    int Timeoutcounter;
+    int PrintLinesMax;
+    int TimeoutMax;
+
+    bool LoadSettings();
  private:
 
-
+    bool Setup();
+    void PrintDebugFrames();
+    void PrintSettings();
+    bool SaveErrorLog();
 
 
 

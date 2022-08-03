@@ -8,5 +8,6 @@ if (tool=="ListenForData") ret=new ListenForData;
 if (tool=="ParseData") ret=new ParseData;
 if (tool=="SaveEvent") ret=new SaveEvent;
 if (tool=="SetupBoards") ret=new SetupBoards;
+if (tool=="SeeConnectedBoards") ret=new SeeConnectedBoards;
 return ret;
 }

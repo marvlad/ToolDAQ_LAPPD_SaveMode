@@ -12,16 +12,9 @@ bool ListenForData::Initialise(std::string configfile, DataModel &data){
 	m_log= m_data->Log;
 
 	if(!m_variables.Get("verbose",m_verbose)) m_verbose=1;
-	/*Old debugging tool 
-        m_data->psec.FFCounter.insert(pair<int,int>(0, 0));
-        m_data->psec.FFCounter.insert(pair<int,int>(1, 0));
-        m_data->psec.FFCounter.insert(pair<int,int>(2, 0));
-        m_data->psec.FFCounter.insert(pair<int,int>(3, 0));
-        m_data->psec.FFCounter.insert(pair<int,int>(4, 0));
-        m_data->psec.FFCounter.insert(pair<int,int>(5, 0));
-        m_data->psec.FFCounter.insert(pair<int,int>(6, 0));
-        m_data->psec.FFCounter.insert(pair<int,int>(7, 0));
-	*/
+
+    if(!m_variables.Get("PrintLinesMax",PrintLinesMax)) PrintLinesMax=15000;
+
 	return true;
 }
 
@@ -52,32 +45,22 @@ bool ListenForData::Execute()
 		m_data->acc->clearData();
 	}
 
-    /*
-        map<int, vector<unsigned short>> rawmap;
-        rawmap = m_data->psec.ReceiveData;
-        for(std::map<int, vector<unsigned short>>::iterator it=rawmap.begin(); it!=rawmap.end(); ++it)
-        {		
-            if(it->second.at(0) != 0x1234)
-            {
-                m_data->psec.FFCounter[it->first] += 1;
-            }
-        }
-	*/
+    //Get Timestamp
+    unsigned long long timeSinceEpoch = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    m_data->psec.Timestamp = to_string(timeSinceEpoch-UTCCONV); 
+
+    vector<unsigned int> tmpERR = m_data->acc->returnErrors();
+	m_data->psec.errorcodes.insert(std::end(m_data->psec.errorcodes), std::begin(tmpERR), std::end(tmpERR));
+	m_data->acc->clearErrors();
+	tmpERR.clear();
+
+    if(m_verbose>1){SaveErrorLog();}
+
 	return true;
 }
 
 
 bool ListenForData::Finalise(){
-	/*
-        if(m_data->psec.FFCounter.size()>0){
-            for(std::map<int, int>::iterator it=m_data->psec.FFCounter.begin(); it!=m_data->psec.FFCounter.end(); ++it)
-            {
-                std::cout << "Board " << it->first << " has " << it->second << " ff buffers" << std::endl; 
-            }
-        }else{
-            std::cout << "Trouble" << std::endl;
-        }
-	*/
 	delete m_data->acc;
     m_data->acc=0;
 	return true;
@@ -90,4 +73,37 @@ string ListenForData::getTime()
     std::stringstream ss;
     ss << std::put_time(std::localtime(&in_time_t), "%Y%d%m_%H%M%S");
     return ss.str();
+}
+
+bool ListenForData::SaveErrorLog()
+{
+    int numLines = 0;
+    std::string line;
+    std::ifstream file("./Errorlog.txt");    
+    while(getline(file, line)){numLines++;}
+    file.close();
+
+    if(numLines>PrintLinesMax){return false;}
+    if(m_data->psec.errorcodes.size()==1)
+    {
+        if(m_data->psec.errorcodes.at(0)==0x00000000)
+        {
+            return false;
+        }
+    }
+
+    //Create Debug file
+    std::fstream outfile("./Errorlog.txt", std::ios_base::out | std::ios_base::app);
+
+    //Print a timestamp
+    outfile << "Time: " << m_data->psec.Timestamp << endl;
+    for(int k1=0; k1<m_data->psec.errorcodes.size(); k1++)
+    {
+        outfile << m_data->psec.errorcodes.at(k1) << " ";
+    }
+    outfile << endl;
+
+    outfile.close();
+
+    return true;
 }
