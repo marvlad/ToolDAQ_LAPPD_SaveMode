@@ -57,7 +57,7 @@ stdUSB::~stdUSB() {
 }
 
 
-void stdUSB::ReInitUSB();
+void stdUSB::ReInitUSB()
 {
 	if (stdHandle != INVALID_HANDLE_VALUE)
 	{

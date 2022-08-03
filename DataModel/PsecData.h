@@ -31,6 +31,7 @@ class PsecData{
     int counter;
     int DataSaved;
     string time;
+    string Timestamp;
 
     unsigned int VersionNumber;
 

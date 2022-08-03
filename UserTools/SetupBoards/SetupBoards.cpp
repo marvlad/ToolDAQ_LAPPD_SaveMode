@@ -144,9 +144,9 @@ bool SetupBoards::Setup()
 
     //Map boards to LAPPDs
     m_data->acc->setLAPPD1(m_data->conf.LAPPDtoBoard1);
-    m_data->psec.LAPPDtoBoard1 = m_data->conf.LAPPDtoBoard1
+    m_data->psec.LAPPDtoBoard1 = m_data->conf.LAPPDtoBoard1;
     m_data->acc->setLAPPD2(m_data->conf.LAPPDtoBoard2);
-    m_data->psec.LAPPDtoBoard2 = m_data->conf.LAPPDtoBoard2
+    m_data->psec.LAPPDtoBoard2 = m_data->conf.LAPPDtoBoard2;
 
     //trigger settings
     ////polarity

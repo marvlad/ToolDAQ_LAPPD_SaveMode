@@ -22,7 +22,7 @@ bool SeeConnectedBoards::Initialise(std::string configfile, DataModel &data){
 
 bool SeeConnectedBoards::Execute()
 {
-    m_data->acc.versionCheck();
+    m_data->acc->versionCheck();
     
 	return true;
 }

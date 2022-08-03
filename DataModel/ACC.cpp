@@ -58,26 +58,6 @@ ACC::~ACC()
 	delete usb;
 }
 
-/*ID:ad1 Re-Init USB*/
-bool ACC::ReInitUSB()
-{
-    delete usb;
-    usb = 0;
-    usleep(500000);
-
-    bool ret = true;
-
-    usb = new stdUSB();
-	if(!usb->isOpen())
-	{
-		errorcode.push_back(0xACA1EE01);
-        cout << "Re-init of USB failed" << endl;
-		ret = false;
-    }
-
-    return ret;
-}
-
 
 /*------------------------------------------------------------------------------------*/
 /*---------------------------Setup functions for ACC/ACDC-----------------------------*/
