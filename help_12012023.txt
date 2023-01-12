@@ -1,0 +1,11 @@
+1. There is now a value for how many events should be recorded. This means the Inline value in the ToolsChainConfig is supposed to stay at -1 (which is infinite). The ToolChain will automatically stop and finish after all requested events are recorded.
+2. Similarly a value for how many events per file should be saved is available.
+3. A lot of prints and log files are verbosity locked. Keeping verbose as 2 should be sufficient
+4. The new LAPPD1_1, LAPPD1_2 are meant as a value corresponding to the phyisical connection on the ACC. If you used ports 0 and 1 give them the corresponding values, same for other combinations. LAPPD2_1 and LAPPD2_2 are not neccessary in the lab.
+5. There is now a timeout value as well. It will define how long the software waits until it stops waiting and retries. If verbose is on to get prints and logfiles I would recommend to have it fairly high since it will do stuff at every timeout and every set level of timeouts (called TimeoutMax). If you want to do the same as in the hall use 500 but keep in mind the prints will increse.
+6. All are now values in the BoardsConfig configfile
+7. Since this is a lot of debug stuff keep space in mind. I think I restricted all logs to a maximum number of lines but I might have missed some and we don't want to kill the Pi.
+8. Regularly keep an eye on the files in general. They should never reach their max size if everything runs smoothly but if something goes wrong and they could be full from then on.
+9. Check the settings used in the BoardsConfig file since they might be not what you previously used. They are from my repo and might be out of date.
+10. Changelog for versions is now a file in the main folder.
+

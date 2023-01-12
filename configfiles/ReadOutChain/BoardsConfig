@@ -26,6 +26,7 @@ StoreLabel LAPPDData
 
 #Timeoutvalue
 Timeout 10000 #ms
+TimeoutMax 300
 
 #Reset
 resetACC 1
