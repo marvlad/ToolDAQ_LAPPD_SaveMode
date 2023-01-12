@@ -2,6 +2,7 @@
 
 Config::Config()
 {
+    ACC_ID = 0;
     LAPPDtoBoard1 = {0,1};
     LAPPDtoBoard2 = {2,3};
     SetDefaults(); 

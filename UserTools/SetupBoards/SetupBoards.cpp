@@ -65,7 +65,7 @@ bool SetupBoards::Execute(){
         while(getline(file, line)){numLines++;}
         file.close();
 
-        if(numLines<PrintLinesMax){PrintDebugFrames();}
+        if(numLines<PrintLinesMax && m_verbose>1){PrintDebugFrames();}
         PrintSettings();
         //TO HERE -------------
     }
@@ -115,7 +115,7 @@ bool SetupBoards::Execute(){
             m_data->acc->emptyUsbLine();
 		}
 
-        if(m_verbose>3){SaveErrorLog();}
+        if(m_verbose>1){SaveErrorLog();}
 	}else
     {
         Timeoutcounter = 0;

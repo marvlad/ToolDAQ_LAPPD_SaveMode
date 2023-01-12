@@ -2,6 +2,7 @@
 
 PsecData::PsecData()
 {
+    ACC_ID = 0;
     VersionNumber = 0xA003;
     counter = 0;
     DataSaved = 0;

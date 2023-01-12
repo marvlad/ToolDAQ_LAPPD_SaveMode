@@ -83,6 +83,7 @@ bool ListenForData::SaveErrorLog()
     file.close();
 
     if(numLines>PrintLinesMax){return false;}
+    if(m_data->psec.errorcodes.size()==0){return false;}
     if(m_data->psec.errorcodes.size()==1)
     {
         if(m_data->psec.errorcodes.at(0)==0x00000000)
