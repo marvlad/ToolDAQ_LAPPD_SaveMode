@@ -60,7 +60,7 @@ bool Config::SetDefaults(){
   Pedestal_channel=2000;
   Pedestal_channel_mask=0x1F;
 	
-  PPSRatio = 0x0001;
+  PPSRatio = 0x0000;
   PPSBeamMultiplexer = 1;
 
   return true;

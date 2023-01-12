@@ -62,6 +62,13 @@
         "xmemory": "cpp",
         "xstddef": "cpp",
         "xstring": "cpp",
-        "xtr1common": "cpp"
+        "xtr1common": "cpp",
+        "deque": "cpp",
+        "fstream": "cpp",
+        "mutex": "cpp",
+        "numeric": "cpp",
+        "queue": "cpp",
+        "stop_token": "cpp",
+        "thread": "cpp"
     }
 }

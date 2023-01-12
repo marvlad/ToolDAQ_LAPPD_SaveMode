@@ -595,7 +595,7 @@ int ACC::listenForAcdcData(int trigMode)
 			}
 		}
 
-		//old trigger
+		/*old trigger
 		if(boardCheck==alignedAcdcIndices)
 		{
             boardsReadyForRead = boardCheck;
@@ -603,8 +603,9 @@ int ACC::listenForAcdcData(int trigMode)
 			map_accIF = lastAccBuffer;
 			break;
 		}
+        */
 
-		/*new trigger
+		//new trigger
         bool control = false;
         if(std::find(boardCheck.begin(),boardCheck.end(),LAPPD1[0])!=boardCheck.end() && std::find(boardCheck.begin(),boardCheck.end(),LAPPD1[1])!=boardCheck.end()) 
         {
@@ -624,7 +625,6 @@ int ACC::listenForAcdcData(int trigMode)
             map_accIF = lastAccBuffer;
             break;
         }
-        */
 	}
 
     //check for mixed buffersizes

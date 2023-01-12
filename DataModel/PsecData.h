@@ -26,6 +26,7 @@ class PsecData{
 
     vector<int> LAPPDtoBoard1;
     vector<int> LAPPDtoBoard2;
+    unsigned int ACC_ID;
 
     //map<int,int> FFCounter;
     int counter;
@@ -54,6 +55,7 @@ class PsecData{
  template <class Archive> void serialize(Archive& ar, const unsigned int version){
 
   ar & VersionNumber;
+  ar & ACC_ID;
   ar & BoardIndex;
   ar & RawWaveform;
   ar & AccInfoFrame;

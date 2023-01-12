@@ -4,9 +4,13 @@
 #2 = Save to Bianrydata -> Store
 #3 = Save to Raw
 #4 = Dual, saves ASCII and BinaryStore
-Save 2
+Save 3
+
+
+### New Settings
 EventsPerFile 10000 #Only relevant for non binary
 MaxEvents 10000
+verbose 2
 
 #LAPPD to boards mapping
 #This corresponds to the physical connection on the ACC
@@ -21,7 +25,7 @@ path ./Results/LAPPD
 StoreLabel LAPPDData
 
 #Timeoutvalue
-Timeout 500 #ms
+Timeout 10000 #ms
 
 #Reset
 resetACC 1

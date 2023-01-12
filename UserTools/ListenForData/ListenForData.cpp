@@ -12,8 +12,7 @@ bool ListenForData::Initialise(std::string configfile, DataModel &data){
 	m_log= m_data->Log;
 
 	if(!m_variables.Get("verbose",m_verbose)) m_verbose=1;
-
-    if(!m_variables.Get("PrintLinesMax",PrintLinesMax)) PrintLinesMax=15000;
+    if(!m_variables.Get("PrintLinesMax",PrintLinesMax)) PrintLinesMax=50000;
 
 	return true;
 }

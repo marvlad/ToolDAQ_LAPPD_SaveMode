@@ -1,0 +1,14 @@
+v3.00
+- Added several debug prints for buffersizes
+- Added a lot of quality of life stuff
+    - Max Events now a settings
+    - Events per file now a setting
+    - Time till timeout occurs now a setting
+    - LAPPD mapping to ACDC boards
+
+v2.50
+- Large Update fixing all sorts of things
+- Added a new Savemode that allows for dual saving 
+- New settings for timeout value and max events 
+- Runtime print at the end
+- Connected boards toolchain available

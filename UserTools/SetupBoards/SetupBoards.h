@@ -14,6 +14,7 @@ using namespace std;
 
 #define MAX_NUM_BOARDS 8
 #define PSECFRAME 7795
+#define PPSFRAME 16
 
 
 /**

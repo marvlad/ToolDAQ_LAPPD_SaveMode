@@ -9,16 +9,13 @@ bool SetupBoards::Initialise(std::string configfile, DataModel &data){
 	//m_variables.Print();
 
 	system("mkdir -p Results");
+    system("mkdir -p LocalLogs");
 	
 	std::cout << "----------------------------------------------------------------------" << std::endl;
 	std::cout << "                                 Hello                                " << std::endl;
-	std::cout << "                         This is version v2.50                        " << std::endl;
+	std::cout << "                         This is version v3.00                        " << std::endl;
 	std::cout << " The latest changes were:                                             " << std::endl;
-    std::cout << " - Large Update fixing all sorts of things                            " << std::endl;
-    std::cout << " - Added a new Savemode that alllows for dual saving                  " << std::endl;
-    std::cout << " - New settings for timeout value and max events                      " << std::endl;
-    std::cout << " - Runtime print at the end                                           " << std::endl;
-    std::cout << " - See connected boards toolchain available                           " << std::endl;
+    std::cout << " - See changelog.txt                                                  " << std::endl;
 	std::cout << "----------------------------------------------------------------------" << std::endl;
 
 	m_data= &data;
@@ -43,7 +40,7 @@ bool SetupBoards::Initialise(std::string configfile, DataModel &data){
     }
 
     if(!m_variables.Get("TimeoutMax",TimeoutMax)) TimeoutMax=300;
-    if(!m_variables.Get("PrintLinesMax",PrintLinesMax)) PrintLinesMax=15000;
+    if(!m_variables.Get("PrintLinesMax",PrintLinesMax)) PrintLinesMax=50000;
 
     Timeoutcounter = 0;
 
@@ -64,7 +61,7 @@ bool SetupBoards::Execute(){
         //Print debug frame as overwrite
         int numLines = 0;
         std::string line;
-        std::ifstream file("./configfiles/ReadOutChain/ACCIF.txt");
+        std::ifstream file("./LocalLogs/ACCIF.txt");
         while(getline(file, line)){numLines++;}
         file.close();
 
@@ -99,15 +96,15 @@ bool SetupBoards::Execute(){
             vector<unsigned short> tempV = m_data->acc->getACCInfoFrame();
             for(int i=0; i<MAX_NUM_BOARDS; i++)
             {
-				if(tempV.at(16+i)>PSECFRAME)
+				if(tempV.at(16+i)!=PSECFRAME && tempV.at(16+i)!=PPSFRAME)
 				{
-                    if(m_verbose>1){std::cout<<"Data buffers were to large with buffer: "<<i<<" -> "<<tempV.at(16+i)<<std::endl;}
+                    if(m_verbose>1){std::cout<<"Data buffers were: "<<i<<" -> "<<tempV.at(16+i)<<std::endl;}
                     m_data->acc->dumpData(0xFF);
                     m_data->acc->emptyUsbLine();
                 }
             }
             tempV.clear();
-            if(m_verbose>1)
+            if(m_verbose>2)
             {
                 m_data->conf.Print();
             }
@@ -147,6 +144,7 @@ bool SetupBoards::Setup()
     m_data->psec.LAPPDtoBoard1 = m_data->conf.LAPPDtoBoard1;
     m_data->acc->setLAPPD2(m_data->conf.LAPPDtoBoard2);
     m_data->psec.LAPPDtoBoard2 = m_data->conf.LAPPDtoBoard2;
+    m_data->psec.ACC_ID = m_data->conf.ACC_ID;
 
     //trigger settings
     ////polarity
@@ -314,7 +312,7 @@ bool SetupBoards::LoadSettings()
 void SetupBoards::PrintDebugFrames()
 {
     //Create Debug file
-    std::fstream outfile("./configfiles/ReadOutChain/ACCIF.txt", std::ios_base::out | std::ios_base::app);
+    std::fstream outfile("./LocalLogs/ACCIF.txt", std::ios_base::out | std::ios_base::app);
 
     //Print a timestamp
     outfile << "Time: " << m_data->psec.Timestamp << endl;
@@ -353,7 +351,7 @@ void SetupBoards::PrintDebugFrames()
 
 void SetupBoards::PrintSettings()
 {
-    std::fstream outfile("./configfiles/ReadOutChain/FoundSettings.txt", std::ios_base::out | std::ios_base::trunc);
+    std::fstream outfile("./LocalLogs/FoundSettings.txt", std::ios_base::out | std::ios_base::trunc);
 
     outfile << "------------------LAPPD to Board mappig-------------" << std::endl;
     outfile << "Will come soon" << std::endl;
@@ -392,7 +390,7 @@ bool SetupBoards::SaveErrorLog()
 {
     int numLines = 0;
     std::string line;
-    std::ifstream file("./Errorlog.txt");    
+    std::ifstream file("./LocalLogs/Errorlog.txt");    
     while(getline(file, line)){numLines++;}
     file.close();
 
@@ -406,7 +404,7 @@ bool SetupBoards::SaveErrorLog()
     }
 
     //Create Debug file
-    std::fstream outfile("./Errorlog.txt", std::ios_base::out | std::ios_base::app);
+    std::fstream outfile("./LocalLogs/Errorlog.txt", std::ios_base::out | std::ios_base::app);
 
     //Print a timestamp
     outfile << "Time: " << m_data->psec.Timestamp << endl;

@@ -23,6 +23,7 @@ class Config : public SerialisableObject{
     int triggermode;
     vector<int> LAPPDtoBoard1;
     vector<int> LAPPDtoBoard2;
+    unsigned int ACC_ID;
 
     int ResetSwitchACC;
     int ResetSwitchACDC;
@@ -77,6 +78,7 @@ class Config : public SerialisableObject{
  template <class Archive> void serialize(Archive& ar, const unsigned int version){
 
   ar & receiveFlag;
+  ar & ACC_ID;
   ar & triggermode;
   ar & LAPPDtoBoard1;
   ar & LAPPDtoBoard2;
