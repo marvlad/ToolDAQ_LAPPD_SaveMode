@@ -9,6 +9,7 @@ v3.00
     - 1: No prints and errorlog, only settings are written to a file
     - >1: Errorlog, buffer size prints and logfile
     - >2: print settings in console
+- Added a help.txt file to help new users adapt to changes
 
 v2.50
 - Large Update fixing all sorts of things
