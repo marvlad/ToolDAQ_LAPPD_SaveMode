@@ -39,6 +39,7 @@ class SetupBoards: public Tool {
     int Timeoutcounter;
     int PrintLinesMax;
     int TimeoutMax;
+    std::string versionnumber;
 
     bool LoadSettings();
  private:

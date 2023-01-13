@@ -10,10 +10,12 @@ bool SetupBoards::Initialise(std::string configfile, DataModel &data){
 
 	system("mkdir -p Results");
     system("mkdir -p LocalLogs");
+
+    if(!m_variables.Get("versionnumber",versionnumber)) versionnumber="Nan";
 	
 	std::cout << "----------------------------------------------------------------------" << std::endl;
 	std::cout << "                                 Hello                                " << std::endl;
-	std::cout << "                         This is version v3.00                        " << std::endl;
+	std::cout << "                         This is version ";std::cout<<versionnumber<<"                    " << std::endl;
 	std::cout << " The latest changes were:                                             " << std::endl;
     std::cout << " - See changelog.txt                                                  " << std::endl;
 	std::cout << "----------------------------------------------------------------------" << std::endl;

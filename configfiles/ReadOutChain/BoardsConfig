@@ -11,6 +11,7 @@ Save 3
 EventsPerFile 10000 #Only relevant for non binary
 MaxEvents 10000
 verbose 2
+versionnumber v3.01
 
 #LAPPD to boards mapping
 #This corresponds to the physical connection on the ACC
