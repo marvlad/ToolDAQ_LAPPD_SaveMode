@@ -74,6 +74,7 @@ bool ParseData::Execute(){
             }
             channel_count = 0;
         }
+        retfinish = true;
     }else if(m_data->conf.Savemode==2)
     {
         //Basic return raw 
