@@ -84,7 +84,10 @@ bool SetupBoards::Execute(){
 			m_data->acc->resetACDC();
 		}
         setupret = Setup();
-	}else
+	}else if(m_data->conf.receiveFlag==2)
+    {
+        //
+    }else
     {
         std::cout << "Setup failed miserably!" << std::endl;
         return false;
