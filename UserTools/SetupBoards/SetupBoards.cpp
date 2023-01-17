@@ -25,7 +25,7 @@ bool SetupBoards::Initialise(std::string configfile, DataModel &data){
 
 	if(!m_variables.Get("verbose",m_verbose)) m_verbose=1;
 
-	m_data->conf.receiveFlag=0;
+	m_data->conf.receiveFlag=1;
 	m_data->acc= new ACC();
 
     bool ret = LoadSettings();
