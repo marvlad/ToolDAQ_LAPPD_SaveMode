@@ -101,7 +101,7 @@ bool ListenForData::SaveErrorLog()
 	{
 		if(m_data->psec.errorcodes.at(k1)!=0x00000000)
 		{
-			outfile << m_data->psec.errorcodes.at(k1) << " ";
+			outfile << "0x" << std::hex << m_data->psec.errorcodes.at(k1) << std::dec <<  " ";
 		}
 	}
 	outfile << endl;
