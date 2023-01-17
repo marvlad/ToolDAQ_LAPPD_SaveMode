@@ -46,6 +46,7 @@ class SetupBoards: public Tool {
 
     bool Setup();
     void PrintDebugFrames();
+    void PrintReturnFrame();
     void PrintSettings();
     bool SaveErrorLog();
 
