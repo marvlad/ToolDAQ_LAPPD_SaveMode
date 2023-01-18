@@ -549,7 +549,7 @@ int ACC::listenForAcdcData(int trigMode)
 		now = chrono::steady_clock::now();
 		if(chrono::duration_cast<chrono::milliseconds>(now - start) > timeoutDuration)
 		{
-			//errorcode.push_back(0xAC15EE01);
+			errorcode.push_back(0xAC15EE01);
 			return 404;
 		}
 

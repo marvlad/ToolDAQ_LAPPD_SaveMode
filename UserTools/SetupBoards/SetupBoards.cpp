@@ -109,6 +109,7 @@ bool SetupBoards::Execute(){
 	{
 		if(m_data->psec.readRetval==404)
 		{
+            std::cout << " timeout " << std::endl;
             Timeoutcounter++;
 		}else
 		{
