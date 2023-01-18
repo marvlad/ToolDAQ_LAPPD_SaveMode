@@ -12,7 +12,7 @@ bool ListenForData::Initialise(std::string configfile, DataModel &data){
 	m_log= m_data->Log;
 
 	if(!m_variables.Get("verbose",m_verbose)) m_verbose=1;
-    	if(!m_variables.Get("PrintLinesMax",PrintLinesMax)) PrintLinesMax=50000;
+    if(!m_variables.Get("PrintLinesMax",PrintLinesMax)) PrintLinesMax=50000;
 
 	return true;
 }
@@ -52,7 +52,14 @@ bool ListenForData::Execute()
 	m_data->psec.errorcodes.insert(std::end(m_data->psec.errorcodes), std::begin(tmpERR), std::end(tmpERR));
 	m_data->acc->clearErrors();
 	tmpERR.clear();
-	if(m_verbose>1){SaveErrorLog();}
+	if(m_verbose>1)
+    {
+        bool errRet = SaveErrorLog();
+        if(errRet==false)
+        {
+            std::cout << "WARNING! Errorlog for Listen for data full" << std::endl;
+        }
+    }
 
 	return true;
 }
@@ -75,6 +82,16 @@ string ListenForData::getTime()
 
 bool ListenForData::SaveErrorLog()
 {
+	if(m_data->psec.errorcodes.size()==0){return true;}
+	if(m_data->psec.errorcodes.size()==1)
+	{
+		if(m_data->psec.errorcodes.at(0)==0x00000000)
+		{
+			m_data->psec.errorcodes.clear();
+			return true;
+		}
+	}
+
 	int numLines = 0;
 	std::string line;
 	std::ifstream file("./LocalLog/Errorlog_ListenForData.txt");    
@@ -82,15 +99,6 @@ bool ListenForData::SaveErrorLog()
 	file.close();
 
 	if(numLines>PrintLinesMax){return false;}
-	if(m_data->psec.errorcodes.size()==0){return false;}
-	if(m_data->psec.errorcodes.size()==1)
-	{
-		if(m_data->psec.errorcodes.at(0)==0x00000000)
-		{
-			m_data->psec.errorcodes.clear();
-			return false;
-		}
-	}
 
 	//Create Debug file
 	std::fstream outfile("./LocalLog/Errorlog_ListenForData.txt", std::ios_base::out | std::ios_base::app);

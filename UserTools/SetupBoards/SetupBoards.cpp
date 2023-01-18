@@ -68,7 +68,11 @@ bool SetupBoards::Execute(){
 		file.close();
 
 		if(numLines<PrintLinesMax && m_verbose>1){PrintDebugFrames();}
-		PrintSettings();
+        else
+        {
+            std::cout << "WARNING! Errorlog for Listen for data full" << std::endl;
+        }
+		if(m_verbose>2){PrintSettings();}
 		//TO HERE -------------
 	}
 
@@ -83,7 +87,15 @@ bool SetupBoards::Execute(){
 		{
 			m_data->acc->resetACDC();
 		}
-        	setupret = Setup();
+        setupret = Setup();
+        if(m_verbose>1)
+        {
+            bool errRet = SaveErrorLog();
+            if(errRet==false)
+            {
+                std::cout << "WARNING! Errorlog for Listen for data full" << std::endl;
+            }
+        }
 	}else if(m_data->conf.receiveFlag==2)
 	{
 		//
@@ -93,40 +105,21 @@ bool SetupBoards::Execute(){
 		return false;
 	}
 
-    	if(m_data->psec.readRetval!=0)
+    if(m_data->psec.readRetval!=0)
 	{
 		if(m_data->psec.readRetval==404)
 		{
-            		Timeoutcounter++;
-            		vector<unsigned short> tempV = m_data->acc->getACCInfoFrame();
-			for(int i=0; i<MAX_NUM_BOARDS; i++)
-			{
-				if(tempV.at(16+i)!=PSECFRAME && tempV.at(16+i)!=PPSFRAME)
-				{
-					if(m_verbose>1){std::cout<<"Data buffers were: "<<i<<" -> "<<tempV.at(16+i)<<std::endl;}
-					m_data->acc->dumpData(0xFF);
-					m_data->acc->emptyUsbLine();
-                		}
-            		}
-            		tempV.clear();
-			if(m_verbose>2)
-			{
-				m_data->conf.Print();
-			}
+            Timeoutcounter++;
 		}else
 		{
-			m_data->psec.errorcodes.push_back(0xAA02EE01);
-			PrintReturnFrame();
+			if(m_verbose>1){PrintReturnFrame();}
 			m_data->acc->dumpData(0xFF);
 			m_data->acc->emptyUsbLine();
 		}
-
-        	if(m_verbose>1){SaveErrorLog();}
 	}else
 	{
 		Timeoutcounter = 0;
 	}
-
 	return true;
 }
 
@@ -322,7 +315,6 @@ void SetupBoards::PrintDebugFrames()
 
 	//Print a timestamp
 	outfile << "Time: " << m_data->psec.Timestamp << endl;
-	outfile << "Unexpected return value = " << m_data->psec.readRetval << endl;
 
 	//Grab first ACC info frame and get all buffer sizes that are present
 	vector<unsigned short> PrintFrame = m_data->acc->getACCInfoFrame();
@@ -366,27 +358,9 @@ void SetupBoards::PrintReturnFrame()
 
 	//Grab first ACC info frame and get all buffer sizes that are present
 	vector<unsigned short> PrintFrame = m_data->acc->getACCInfoFrame();
-	for(int j=0; j<8; j++)
+	for(int j=0; j<32; j++)
 	{
-		if(PrintFrame.at(14) & (1 << j))
-		{
-			outfile << "W" << j << ": " << PrintFrame.at(16+j) << " | ";
-		}
-	}
-	outfile << endl;
-
-	//Clear temp vector plus sleep a bit
-	PrintFrame.clear();
-	usleep(100000);
-
-	//Grab second ACC info frame and get all buffer sizes that are present
-	PrintFrame = m_data->acc->getACCInfoFrame();
-	for(int j2=0; j2<8; j2++)
-	{
-		if(PrintFrame.at(14) & (1 << j2))
-		{
-			outfile << "W" << j2 << ": " << PrintFrame.at(16+j2) << " | ";
-		}
+		outfile << "W" << j << ": " << PrintFrame.at(j) << " | ";
 	}
 	outfile << endl;
 
@@ -435,13 +409,6 @@ void SetupBoards::PrintSettings()
 
 bool SetupBoards::SaveErrorLog()
 {
-	int numLines = 0;
-	std::string line;
-	std::ifstream file("./LocalLogs/Errorlog_Setup.txt");    
-	while(getline(file, line)){numLines++;}
-	file.close();
-
-	if(numLines>PrintLinesMax){return false;}
 	if(m_data->psec.errorcodes.size()==0){return false;}
 	if(m_data->psec.errorcodes.size()==1)
 	{
@@ -451,6 +418,14 @@ bool SetupBoards::SaveErrorLog()
 		    	return false;
 		}
 	}
+
+	int numLines = 0;
+	std::string line;
+	std::ifstream file("./LocalLogs/Errorlog_Setup.txt");    
+	while(getline(file, line)){numLines++;}
+	file.close();
+
+	if(numLines>PrintLinesMax){return false;}
 
 	//Create Debug file
 	std::fstream outfile("./LocalLogs/Errorlog_Setup.txt", std::ios_base::out | std::ios_base::app);

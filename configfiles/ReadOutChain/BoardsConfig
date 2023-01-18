@@ -4,7 +4,7 @@
 #2 = Save to Bianrydata -> Store
 #3 = Save to Raw
 #4 = Dual, saves ASCII and BinaryStore
-Save 3
+Save 1
 
 
 ### New Settings
@@ -34,7 +34,7 @@ resetACC 1
 resetACDC 1
 
 #SMA set
-SMA 0
+SMA 1
 
 #Trigger
 ##Triggermode
@@ -47,7 +47,7 @@ ACC_Sign 0 #normal(0) or inverted(1)
 ACDC_Sign 0 #normal(0) or inverted(1)
 
 ##Self trigger settings
-SELF_Sign 1 #normal(0) or inverted(1)
+SELF_Sign 0 #normal(0) or inverted(1)
 SELF_Enable_Coincidence 0 #on(1) or off(0)
 SELF_Coincidence_Number 0 #number from 0 to 30
 SELF_threshold 1600 #adc counts from 0 to 4095
@@ -69,20 +69,20 @@ PSEC_Channel_Mask_3 0x00 #6 bit, each for a channel, from 0x00 to 0x3F
 PSEC_Channel_Mask_4 0x00 #6 bit, each for a channel, from 0x00 to 0x3F
 
 #Validation time
-Validation_Start 325250 #value from 0 to 819 in ns
-Validation_Window 20000 #value from 0 to 819 in ns
+Validation_Start 250 #value from 0 to 819 in ns
+Validation_Window 5000 #value from 0 to 819 in ns
 
 #Calibration mode
 Calibration_Mode 0 #on(1) or off(0)
 
 #Raw mode !!!!DOES NOTHING!!!!
-Raw_Mode 1 #returns a map with <int, vector<unsigned short>> | the int is the board index and the vector the data
+Raw_Mode 0 #returns a map with <int, vector<unsigned short>> | the int is the board index and the vector the data
 
 #Pedestal set value channel
 Pedestal_channel 2000 #pedestal value to be set 
 Pedestal_channel_mask 0x1F #5 bit representin psec chips
 
 #PPS
-PPS_Ratio 0x000a
+PPS_Ratio 0x0000
 PPS_Mux 1
 
