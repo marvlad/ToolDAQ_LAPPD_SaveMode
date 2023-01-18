@@ -107,9 +107,12 @@ bool SetupBoards::Execute(){
 
     if(m_data->psec.readRetval!=0)
 	{
+        if(m_verbose>1){PrintDebugFrames();}
 		if(m_data->psec.readRetval==404)
 		{
             std::cout << " timeout " << std::endl;
+            m_data->acc->dumpData(0xFF);
+			m_data->acc->emptyUsbLine();
             Timeoutcounter++;
 		}else
 		{
@@ -316,30 +319,13 @@ void SetupBoards::PrintDebugFrames()
 
 	//Print a timestamp
 	outfile << "Time: " << m_data->psec.Timestamp << endl;
+	outfile << "Unexpected return value = " << m_data->psec.readRetval << endl;
 
 	//Grab first ACC info frame and get all buffer sizes that are present
 	vector<unsigned short> PrintFrame = m_data->acc->getACCInfoFrame();
-	for(int j=0; j<8; j++)
+	for(int j=0; j<32; j++)
 	{
-		if(PrintFrame.at(14) & (1 << j))
-		{
-			outfile << "W" << j << ": " << PrintFrame.at(16+j) << " | ";
-		}
-	}
-	outfile << endl;
-
-	//Clear temp vector plus sleep a bit
-	PrintFrame.clear();
-	usleep(100000);
-
-	//Grab second ACC info frame and get all buffer sizes that are present
-	PrintFrame = m_data->acc->getACCInfoFrame();
-	for(int j2=0; j2<8; j2++)
-	{
-		if(PrintFrame.at(14) & (1 << j2))
-		{
-			outfile << "W" << j2 << ": " << PrintFrame.at(16+j2) << " | ";
-		}
+		outfile << "W" << j << ": " << PrintFrame.at(j) << " | ";
 	}
 	outfile << endl;
 
