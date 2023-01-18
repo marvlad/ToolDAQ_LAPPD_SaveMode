@@ -107,7 +107,13 @@ bool SetupBoards::Execute(){
 
     if(m_data->psec.readRetval!=0)
 	{
-        if(m_verbose>1){PrintDebugFrames();}
+        //Print debug frame as overwrite
+		int numLines = 0;
+		std::string line;
+		std::ifstream file("./LocalLogs/ACCIF.txt");
+		while(getline(file, line)){numLines++;}
+		file.close();
+        if(numLines<PrintLinesMax && m_verbose>1){PrintDebugFrames();}
 		if(m_data->psec.readRetval==404)
 		{
             std::cout << " timeout " << std::endl;
