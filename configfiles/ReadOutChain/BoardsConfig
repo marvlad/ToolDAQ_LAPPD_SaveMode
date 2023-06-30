@@ -8,6 +8,7 @@ Save 1
 
 
 ### New Settings
+PrintLinesMax 100000
 EventsPerFile 10000 #Only relevant for non binary
 MaxEvents 10000
 verbose 2
