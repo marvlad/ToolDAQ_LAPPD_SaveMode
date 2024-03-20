@@ -243,6 +243,22 @@ int ParseData::getParsedMeta(std::vector<unsigned short> buffer, int classindex)
 	}
 
 	meta.push_back(CombinedTriggerRateCount);
+	// dummy timestamp
+        // ----------------------------------------------------------------------------------------------------
+        int extra_timestamp = 1;
+        if (extra_timestamp == 1) {
+                unsigned int decimalNumber = static_cast<unsigned int>(std::time(nullptr));
+                std::stringstream ss;
+                ss << std::hex << std::setw(8) << std::setfill('0') << decimalNumber; // Ensure 8 characters in the output
+                std::string hexString = ss.str();
+                // Split the hex string into sets of 4 characters and convert each to unsigned short
+                for (size_t i = 0; i < hexString.length(); i += 4) {
+                    std::string sub = hexString.substr(i, 4);
+                    unsigned short value = static_cast<unsigned short>(std::stoul(sub, nullptr, 16));
+                    meta.push_back(value);
+                }
+        }
+        // ----------------------------------------------------------------------------------------------------
 	meta.push_back(0xeeee);
 	return 0;
 }
